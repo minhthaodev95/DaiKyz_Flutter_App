@@ -53,6 +53,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   _selectTime() async {
     final TimeOfDay? newTime = await showTimePicker(
+      helpText: 'Edit time',
       context: context,
       initialTime: _time,
       initialEntryMode: TimePickerEntryMode.input,
@@ -66,8 +67,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   _selectTimeEnd() async {
     final TimeOfDay? newTime = await showTimePicker(
+      helpText: 'Edit time',
       context: context,
-      initialTime: _time,
+      initialTime: _timeEnd,
       initialEntryMode: TimePickerEntryMode.input,
     );
     if (newTime != null) {

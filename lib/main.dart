@@ -2,7 +2,6 @@ import 'package:Dailoz/screens/add_task_screen.dart';
 import 'package:Dailoz/screens/authscreens/onboarding_screen.dart';
 import 'package:Dailoz/screens/graphicscreen/analytic_screen.dart';
 import 'package:Dailoz/screens/homescreen/home_screen.dart';
-import 'package:Dailoz/screens/process_taskscreen/process_task_screen.dart';
 import 'package:Dailoz/screens/profilescreen/profile_screen.dart';
 import 'package:Dailoz/screens/taskscreen/task_screen.dart';
 import 'package:flutter/material.dart';

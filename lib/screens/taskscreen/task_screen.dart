@@ -8,9 +8,35 @@ import 'package:intl/intl.dart';
 import 'package:Dailoz/widgets/task_widget.dart';
 
 // ignore: must_be_immutable
-class TaskScreens extends StatelessWidget {
+class TaskScreens extends StatefulWidget {
   TaskScreens({Key? key}) : super(key: key);
+
+  @override
+  State<TaskScreens> createState() => _TaskScreensState();
+}
+
+class _TaskScreensState extends State<TaskScreens> {
   var dateString = DateFormat.jm().format(DateTime.now());
+
+  DateTime selectedDate = DateTime.now();
+
+  _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2025),
+        cancelText: 'Cancel',
+        confirmText: 'Save');
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        print(selectedDate);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,8 +67,11 @@ class TaskScreens extends StatelessWidget {
                     onTap: () {},
                     child: Row(
                       children: [
-                        SvgPicture.asset('assets/icons/date_icon.svg',
-                            height: 20, width: 20),
+                        GestureDetector(
+                          onTap: _selectDate,
+                          child: SvgPicture.asset('assets/icons/date_icon.svg',
+                              height: 20, width: 20),
+                        ),
                         const SizedBox(width: 5.0),
                         ConstrainedBox(
                           constraints:

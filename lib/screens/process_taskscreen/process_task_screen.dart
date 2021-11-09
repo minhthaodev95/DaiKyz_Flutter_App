@@ -4,8 +4,9 @@ import 'package:Dailoz/widgets/task_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+// import 'package:flutter/material.dart';
 
 class ProcessTask extends StatefulWidget {
   const ProcessTask({Key? key, required this.processTitle}) : super(key: key);
@@ -27,27 +28,224 @@ class _ProcessTaskState extends State<ProcessTask> {
         .add(Duration(days: numdays))); // To get yesterday use "Subtract"
   }
 
+  // show Date Rang Picker
   late DateTimeRange selectedDate;
-  _selectDate() async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      initialEntryMode: DatePickerEntryMode.calendar,
-      context: context,
-      firstDate: DateTime(DateTime.now().year - 5),
-      lastDate: DateTime(DateTime.now().year + 5),
-      initialDateRange: DateTimeRange(
-        end: DateTime(
-            DateTime.now().year, DateTime.now().month, DateTime.now().day + 5),
-        start: DateTime.now(),
-      ),
-      cancelText: 'Cancel',
-      confirmText: 'Save',
-    );
+  void _selectDate() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Align(
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.white,
+              ),
+              height: 400,
+              width: 300,
+              child: SfDateRangePicker(
+                onSubmit: (value) {
+                  if (value is PickerDateRange) {
+                    print(value.startDate);
+                    print(value.endDate);
+                  }
+                  Navigator.pop(context);
+                },
+                initialSelectedRange: PickerDateRange(
+                  DateTime.now(),
+                  DateTime.now().add(
+                    const Duration(days: 3),
+                  ),
+                ),
+                showNavigationArrow: true,
+                view: DateRangePickerView.month,
+                selectionShape: DateRangePickerSelectionShape.circle,
+                selectionTextStyle: const TextStyle(
+                  decoration: TextDecoration.none,
+                ),
+                viewSpacing: 5,
+                showActionButtons: true,
+                confirmText: 'Save',
+                cancelText: 'Cancel',
+                selectionMode: DateRangePickerSelectionMode.range,
+                monthCellStyle: const DateRangePickerMonthCellStyle(
+                  textStyle: TextStyle(fontSize: 15, color: Colors.black),
+                ),
+              ),
+            ),
+          );
+        });
+  }
 
-    if (picked != null) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
+  // show Dialog Filter
+
+  void _selectFilter() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.white,
+              ),
+              height: 400,
+              width: 300,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Sort by tag',
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Color(0xff000000),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Roboto'),
+                  ),
+
+                  Container(
+                    width: 300,
+                    height: 100,
+                    child: ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(maxWidth: 200, minWidth: 200),
+                      child: ListView.builder(
+                        itemCount: 4,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        // physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.only(right: 5.0),
+                          child: ChoiceChip(
+                            label: Text(
+                              'Choice 1',
+                              style: TextStyle(
+                                decoration: TextDecoration.none,
+                                color: index == 1
+                                    ? const Color(0xff8F81FE)
+                                    : index == 2
+                                        ? const Color(0xffF0A58E)
+                                        : index == 3
+                                            ? const Color(0xffF57C96)
+                                            : const Color(0xff1EC1C3),
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            selected: false,
+                            disabledColor: (index == 1)
+                                ? const Color(0xffECEAFF)
+                                : const Color(0xffFFEFEB),
+                            // selectedColor: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // SizedBox(
+                  //   height: 50,
+                  //   width: 300,
+                  //   child: ListView.builder(
+                  //     scrollDirection: Axis.horizontal,
+                  //     shrinkWrap: true,
+                  //     itemCount: 5,
+                  //     itemBuilder: (context, index) {
+                  //       return Align(
+                  //         child: Container(
+                  //           margin: const EdgeInsets.only(right: 10.0),
+                  //           padding: const EdgeInsets.only(
+                  //               top: 8.0, left: 15.0, bottom: 8.0, right: 15.0),
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(22.0),
+                  //             color: const Color(0xffD1FEFF),
+                  //           ),
+                  //           child: const Text('Work',
+                  //               style: TextStyle(
+                  //                 decoration: TextDecoration.none,
+                  //                 color: Color(0xff1EC1C3),
+                  //                 fontSize: 14.0,
+                  //                 fontFamily: 'Roboto',
+                  //               )),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                  const Text(
+                    'Sort by type',
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Color(0xff000000),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Roboto'),
+                  ),
+                  const Text(
+                    'Sort by ',
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Color(0xff000000),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Roboto'),
+                  ),
+                  Container(
+                    alignment: AlignmentDirectional.center,
+                    constraints: const BoxConstraints(minHeight: 52.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: OverflowBar(
+                      spacing: 18,
+                      children: [
+                        SizedBox(
+                          width: 80.0,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors
+                                  .white, //change background color of button
+                              onPrimary: const Color(
+                                  0xff5B67CA), //change text color of button
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  side: const BorderSide(
+                                      width: 1.0, color: Color(0xff5B67CA))),
+                              // elevation: 5.0,
+                            ),
+                            onPressed: () {},
+                            child: const Text('Cancel'),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 80.0,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color(
+                                  0xff5B67CA), //change background color of button
+                              onPrimary: const Color(
+                                  0xffffffff), //change text color of button
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  side: const BorderSide(
+                                      width: 1.0, color: Color(0xff5B67CA))),
+                              // elevation: 5.0,
+                            ),
+                            onPressed: () {},
+                            child: const Text('Filter'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -108,15 +306,18 @@ class _ProcessTaskState extends State<ProcessTask> {
                 children: [
                   const Expanded(child: SearchForm()),
                   const SizedBox(width: 5.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: const Color(0xffE0DEDE),
+                  GestureDetector(
+                    onTap: _selectFilter,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        color: const Color(0xffE0DEDE),
+                      ),
+                      width: 50.0,
+                      height: 50.0,
+                      padding: const EdgeInsets.all(12.0),
+                      child: SvgPicture.asset('assets/icons/filter.svg'),
                     ),
-                    width: 50.0,
-                    height: 50.0,
-                    padding: const EdgeInsets.all(12.0),
-                    child: SvgPicture.asset('assets/icons/filter.svg'),
                   ),
                 ],
               ),

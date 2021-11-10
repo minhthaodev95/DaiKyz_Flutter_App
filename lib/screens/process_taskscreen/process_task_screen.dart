@@ -1,5 +1,5 @@
 import 'package:Dailoz/dymmyData/task_data.dart';
-import 'package:Dailoz/screens/taskscreen/widget_taskscreen/search_form.dart';
+import 'package:Dailoz/widgets/search_form.dart';
 import 'package:Dailoz/widgets/task_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -77,174 +77,281 @@ class _ProcessTaskState extends State<ProcessTask> {
         });
   }
 
+  List<String> tags = ['Office', 'Home', 'Urgent', 'Work'];
   // show Dialog Filter
-
+  List selectedIndex = [];
   void _selectFilter() {
     showDialog(
         context: context,
         builder: (context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-                color: Colors.white,
-              ),
-              height: 400,
-              width: 300,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Sort by tag',
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Color(0xff000000),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Roboto'),
-                  ),
-
-                  Container(
-                    width: 300,
-                    height: 100,
-                    child: ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxWidth: 200, minWidth: 200),
-                      child: ListView.builder(
-                        itemCount: 4,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        // physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => Container(
-                          margin: const EdgeInsets.only(right: 5.0),
-                          child: ChoiceChip(
-                            label: Text(
-                              'Choice 1',
-                              style: TextStyle(
-                                decoration: TextDecoration.none,
-                                color: index == 1
-                                    ? const Color(0xff8F81FE)
-                                    : index == 2
-                                        ? const Color(0xffF0A58E)
-                                        : index == 3
-                                            ? const Color(0xffF57C96)
-                                            : const Color(0xff1EC1C3),
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14.0,
+          bool _selected = false;
+          return StatefulBuilder(builder: (context, StateSetter setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  color: Colors.white,
+                ),
+                height: 400,
+                width: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Sort by tag',
+                      style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Color(0xff000000),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Roboto'),
+                    ),
+                    SizedBox(
+                      width: 300,
+                      height: 80,
+                      child: ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(maxWidth: 200, minWidth: 200),
+                        child: ListView.builder(
+                          itemCount: tags.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          // physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => Container(
+                            margin: const EdgeInsets.only(right: 5.0),
+                            child: ChoiceChip(
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  if (!selectedIndex.contains(index)) {
+                                    selectedIndex.add(index);
+                                  } else if (selectedIndex.contains(index)) {
+                                    selectedIndex.remove(index);
+                                  }
+                                });
+                              },
+                              backgroundColor: index == 0
+                                  ? const Color(0xffECEAFF)
+                                  : index == 1
+                                      ? const Color(0xffFFEFEB)
+                                      : index == 2
+                                          ? const Color(0xffFFE9ED)
+                                          : const Color(0xffD1FEFF),
+                              label: Text(
+                                tags[index],
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  color: index == 0
+                                      ? const Color(0xff8F81FE)
+                                      : index == 1
+                                          ? const Color(0xffF0A58E)
+                                          : index == 2
+                                              ? const Color(0xffF57C96)
+                                              : const Color(0xff1EC1C3),
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14.0,
+                                ),
                               ),
+                              selected: selectedIndex.contains(index),
+                              disabledColor: const Color(0xff000000),
+                              selectedColor: const Color(0xff8F99EB),
                             ),
-                            selected: false,
-                            disabledColor: (index == 1)
-                                ? const Color(0xffECEAFF)
-                                : const Color(0xffFFEFEB),
-                            // selectedColor: Colors.black,
                           ),
                         ),
                       ),
                     ),
-                  ),
-
-                  // SizedBox(
-                  //   height: 50,
-                  //   width: 300,
-                  //   child: ListView.builder(
-                  //     scrollDirection: Axis.horizontal,
-                  //     shrinkWrap: true,
-                  //     itemCount: 5,
-                  //     itemBuilder: (context, index) {
-                  //       return Align(
-                  //         child: Container(
-                  //           margin: const EdgeInsets.only(right: 10.0),
-                  //           padding: const EdgeInsets.only(
-                  //               top: 8.0, left: 15.0, bottom: 8.0, right: 15.0),
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(22.0),
-                  //             color: const Color(0xffD1FEFF),
-                  //           ),
-                  //           child: const Text('Work',
-                  //               style: TextStyle(
-                  //                 decoration: TextDecoration.none,
-                  //                 color: Color(0xff1EC1C3),
-                  //                 fontSize: 14.0,
-                  //                 fontFamily: 'Roboto',
-                  //               )),
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                  const Text(
-                    'Sort by type',
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Color(0xff000000),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Roboto'),
-                  ),
-                  const Text(
-                    'Sort by ',
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Color(0xff000000),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Roboto'),
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional.center,
-                    constraints: const BoxConstraints(minHeight: 52.0),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: OverflowBar(
-                      spacing: 18,
+                    const Text(
+                      'Sort by type',
+                      style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Color(0xff000000),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Roboto'),
+                    ),
+                    Row(
                       children: [
-                        SizedBox(
-                          width: 80.0,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors
-                                  .white, //change background color of button
-                              onPrimary: const Color(
-                                  0xff5B67CA), //change text color of button
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: const BorderSide(
-                                      width: 1.0, color: Color(0xff5B67CA))),
-                              // elevation: 5.0,
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                right: 5.0, top: 20.0, bottom: 20.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: const Color(0xff8F99EB)),
+                            width: 80,
+                            height: 31,
+                            child: const Center(
+                              child: Text(
+                                'Private',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
                             ),
-                            onPressed: () {},
-                            child: const Text('Cancel'),
                           ),
                         ),
-                        SizedBox(
-                          width: 80.0,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: const Color(
-                                  0xff5B67CA), //change background color of button
-                              onPrimary: const Color(
-                                  0xffffffff), //change text color of button
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: const BorderSide(
-                                      width: 1.0, color: Color(0xff5B67CA))),
-                              // elevation: 5.0,
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                right: 5.0, top: 20.0, bottom: 20.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: const Color(0xffE88B8C)),
+                            width: 80,
+                            height: 31,
+                            child: const Center(
+                              child: Text(
+                                'Personal',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
                             ),
-                            onPressed: () {},
-                            child: const Text('Filter'),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                right: 5.0, top: 20.0, bottom: 20.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: const Color(0xff7EC8E7)),
+                            width: 80,
+                            height: 31,
+                            child: const Center(
+                              child: Text(
+                                'Secret',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    const Text(
+                      'Sort by ',
+                      style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Color(0xff000000),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Roboto'),
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                right: 10.0, top: 20.0, bottom: 20.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: const Color(0xffDDDEE1)),
+                            width: 80,
+                            height: 31,
+                            child: const Center(
+                              child: Text(
+                                'Newest',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14.0,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                right: 10.0, top: 20.0, bottom: 20.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: const Color(0xffDDDEE1)),
+                            width: 80,
+                            height: 31,
+                            child: const Center(
+                              child: Text(
+                                'Farthest',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14.0,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      alignment: AlignmentDirectional.center,
+                      constraints: const BoxConstraints(minHeight: 52.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: OverflowBar(
+                        spacing: 18,
+                        children: [
+                          SizedBox(
+                            width: 80.0,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors
+                                    .white, //change background color of button
+                                onPrimary: const Color(
+                                    0xff5B67CA), //change text color of button
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: const BorderSide(
+                                        width: 1.0, color: Color(0xff5B67CA))),
+                                // elevation: 5.0,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 80.0,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: const Color(
+                                    0xff5B67CA), //change background color of button
+                                onPrimary: const Color(
+                                    0xffffffff), //change text color of button
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: const BorderSide(
+                                        width: 1.0, color: Color(0xff5B67CA))),
+                                // elevation: 5.0,
+                              ),
+                              onPressed: () {},
+                              child: const Text('Filter'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+          });
         });
   }
 
@@ -304,7 +411,7 @@ class _ProcessTaskState extends State<ProcessTask> {
               padding: const EdgeInsets.all(15.0),
               child: Row(
                 children: [
-                  const Expanded(child: SearchForm()),
+                  Expanded(child: SearchForm()),
                   const SizedBox(width: 5.0),
                   GestureDetector(
                     onTap: _selectFilter,

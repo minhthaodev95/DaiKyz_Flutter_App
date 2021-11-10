@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SearchForm extends StatelessWidget {
-  const SearchForm({
+  SearchForm({
     Key? key,
   }) : super(key: key);
-
+  var _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50.0,
       child: TextFormField(
+        controller: _controller,
         style: const TextStyle(
             fontSize: 18.0, fontFamily: "Roboto", color: Color(0xff727EE0)),
         decoration: InputDecoration(
@@ -34,7 +35,9 @@ class SearchForm extends StatelessWidget {
           ),
           suffixIcon: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: SvgPicture.asset('assets/icons/cancel_icon.svg'),
+            child: GestureDetector(
+                onTap: _controller.clear,
+                child: SvgPicture.asset('assets/icons/cancel_icon.svg')),
           ),
         ),
       ),

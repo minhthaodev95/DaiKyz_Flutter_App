@@ -1,4 +1,4 @@
-import 'package:Dailoz/screens/add_task_screen.dart';
+import 'package:Dailoz/screens/add_task_screen/add_task_screen.dart';
 import 'package:Dailoz/screens/authscreens/onboarding_screen.dart';
 import 'package:Dailoz/screens/graphicscreen/analytic_screen.dart';
 import 'package:Dailoz/screens/homescreen/home_screen.dart';
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => const OnboardingScreen(),
+        '/': (context) => OnboardingScreen(),
         '/home': (context) => const HomeScreen(),
         '/taskScreen': (context) => TaskScreens(),
         '/addtask': (context) => const AddTaskScreen(),

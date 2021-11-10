@@ -11,10 +11,12 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+  //declare variable
   bool isChecked = false;
   int index = 1;
+  List<String> tags = [];
 
-  // Style
+  // Declare Style
   TextStyle titleStyle = const TextStyle(
     color: Color(0xff8A8BB3),
     fontSize: 14.0,
@@ -77,6 +79,122 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         _timeEnd = newTime;
       });
     }
+  }
+
+  void _newTagDialog() {
+    var _controller = TextEditingController();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: Colors.white,
+                  ),
+                  height: 200,
+                  width: 300,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Text(
+                        'New Tag',
+                        style: TextStyle(
+                          color: Color(0xff10275A),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22.0,
+                          fontFamily: 'Roboto',
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50.0,
+                        child: TextFormField(
+                          controller: _controller,
+                          style: const TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: "Roboto",
+                              color: Color(0xff727EE0)),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xffE0DEDE),
+                            hintText: "Tag's name",
+                            hintStyle: TextStyle(
+                                fontSize: 18.0,
+                                fontFamily: "Roboto",
+                                color: Color(0xffB0B5DD)),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: AlignmentDirectional.center,
+                        constraints: const BoxConstraints(minHeight: 52.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: OverflowBar(
+                          spacing: 18,
+                          children: [
+                            SizedBox(
+                              width: 80.0,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors
+                                      .white, //change background color of button
+                                  onPrimary: const Color(
+                                      0xff5B67CA), //change text color of button
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: const BorderSide(
+                                          width: 1.0,
+                                          color: Color(0xff5B67CA))),
+                                  // elevation: 5.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 80.0,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(
+                                      0xff5B67CA), //change background color of button
+                                  onPrimary: const Color(
+                                      0xffffffff), //change text color of button
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: const BorderSide(
+                                          width: 1.0,
+                                          color: Color(0xff5B67CA))),
+                                  // elevation: 5.0,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    tags.add(_controller.value.text.toString());
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Save'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )));
+        });
   }
 
   @override
@@ -209,7 +327,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
             ),
             const SizedBox(height: 25.0),
-            // Décription field
+            // Description field
             Text(
               'Description',
               style: titleStyle,
@@ -305,82 +423,49 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               'Tags',
               style: titleStyle,
             ),
-            const SizedBox(height: 20.0),
-            Wrap(
-              spacing: 15.0,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, left: 15.0, bottom: 8.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.0),
-                    color: const Color(0xffECEAFF),
-                  ),
-                  child: const Text('Office',
-                      style: TextStyle(
-                        color: Color(0xff8F81FE),
-                        fontSize: 14.0,
-                        fontFamily: 'Roboto',
-                      )),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, left: 15.0, bottom: 8.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.0),
-                    color: const Color(0xffFFEFEB),
-                  ),
-                  child: const Text('Home',
-                      style: TextStyle(
-                        color: Color(0xffF0A58E),
-                        fontSize: 14.0,
-                        fontFamily: 'Roboto',
-                      )),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, left: 15.0, bottom: 8.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.0),
-                    color: const Color(0xffFFE9ED),
-                  ),
-                  child: const Text('Urgent',
-                      style: TextStyle(
-                        color: Color(0xffF57C96),
-                        fontSize: 14.0,
-                        fontFamily: 'Roboto',
-                      )),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, left: 15.0, bottom: 8.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.0),
-                    color: const Color(0xffD1FEFF),
-                  ),
-                  child: const Text('Work',
-                      style: TextStyle(
-                        color: Color(0xff1EC1C3),
-                        fontSize: 14.0,
-                        fontFamily: 'Roboto',
-                      )),
-                ),
-              ],
+            const SizedBox(height: 10.0),
+            SizedBox(
+              child: Wrap(
+                  spacing: 15.0,
+                  children: List<Widget>.generate(
+                    tags.length,
+                    (int idx) {
+                      return Chip(
+                        deleteIcon: const Icon(
+                          Icons.close,
+                          size: 15,
+                        ),
+                        onDeleted: () {
+                          setState(() {
+                            tags.remove(tags[idx]);
+                          });
+                        },
+                        label: Text(tags[idx],
+                            style: const TextStyle(
+                              color: Color(0xff8F81FE),
+                              fontSize: 14.0,
+                              fontFamily: 'Roboto',
+                            )),
+                      );
+                    },
+                  ).toList()),
             ),
-            const SizedBox(height: 25.0),
-            const Align(
+            Align(
               alignment: Alignment.center,
-              child: Text(
-                '+ Add new tag',
-                style: TextStyle(
-                  color: Color(0xffA8AEDF),
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Roboto',
+              child: GestureDetector(
+                onTap: _newTagDialog,
+                child: const Text(
+                  '+ Add new tag',
+                  style: TextStyle(
+                    color: Color(0xffA8AEDF),
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Roboto',
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 30.0),
+            const SizedBox(height: 20.0),
             //Create button field
             ElevatedButton(
               style: ElevatedButton.styleFrom(

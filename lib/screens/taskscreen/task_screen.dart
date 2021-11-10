@@ -1,7 +1,7 @@
 import 'package:Dailoz/dymmyData/task_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:Dailoz/screens/taskscreen/widget_taskscreen/search_form.dart';
+import 'package:Dailoz/widgets/search_form.dart';
 import 'package:Dailoz/screens/taskscreen/widget_taskscreen/table_calendar.dart';
 import 'package:Dailoz/widgets/dot_navigation_bar.dart';
 import 'package:intl/intl.dart';
@@ -44,8 +44,8 @@ class _TaskScreensState extends State<TaskScreens> {
         child: Column(
           children: [
             const SizedBox(height: 50.0),
-            const Padding(
-              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
               child: SearchForm(),
             ),
             const SizedBox(height: 30.0),
@@ -123,49 +123,73 @@ class _TaskScreensState extends State<TaskScreens> {
                 ],
               ),
             ),
-            ListView.builder(
-              padding: const EdgeInsets.only(top: 5),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.only(left: 15.0, top: 0),
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(right: 15.0),
-                      child: Divider(
-                        thickness: 1.0,
-                        color: Color(0xffE0E3E8),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(width: 50, child: Text('0$index:00')),
-                        SizedBox(
-                          height: 120.0,
-                          width: (MediaQuery.of(context).size.width - 65),
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            // physics: const AlwaysScrollableScrollPhysics(),
-                            itemCount: tasks.length,
-                            itemBuilder: (context, index) => StackWidget(
-                              title: tasks[index].title,
-                              tags: tasks[index].tags,
-                              typeId: tasks[index].typeId,
-                              process: tasks[index].process,
-                              start: tasks[index].dateStart,
-                              cTitleWidth: 125,
-                              end: tasks[index].dateEnd,
+            tasks.isEmpty
+                ? Container(
+                    padding: const EdgeInsets.only(top: 60.0),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SvgPicture.asset('assets/image_svg/task_empty.svg'),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          const Text(
+                            'You don’t have any schedule today.\nTap the plus button to create new to-do.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xff575757),
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto',
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.only(top: 5),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.only(left: 15.0, top: 0),
+                      child: Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 15.0),
+                            child: Divider(
+                              thickness: 1.0,
+                              color: Color(0xffE0E3E8),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 50, child: Text('0$index:00')),
+                              SizedBox(
+                                height: 120.0,
+                                width: (MediaQuery.of(context).size.width - 65),
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  // physics: const AlwaysScrollableScrollPhysics(),
+                                  itemCount: tasks.length,
+                                  itemBuilder: (context, index) => StackWidget(
+                                    title: tasks[index].title,
+                                    tags: tasks[index].tags,
+                                    typeId: tasks[index].typeId,
+                                    process: tasks[index].process,
+                                    start: tasks[index].dateStart,
+                                    cTitleWidth: 125,
+                                    end: tasks[index].dateEnd,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),

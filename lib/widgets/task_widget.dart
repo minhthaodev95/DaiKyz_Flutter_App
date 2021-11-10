@@ -1,4 +1,5 @@
 import 'package:Dailoz/models/task_model.dart';
+import 'package:Dailoz/screens/detail_task_screen/detail_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -97,16 +98,32 @@ class StackWidget extends StatelessWidget {
                       children: [
                         SizedBox(
                           width: cTitleWidth,
-                          child: RichText(
-                            overflow: TextOverflow.ellipsis,
-                            strutStyle: const StrutStyle(fontSize: 12.0),
-                            text: TextSpan(
-                              text: title,
-                              style: const TextStyle(
-                                  color: Color(0xff2C406E),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                  fontFamily: 'Roboto'),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DetailTask(
+                                          title: title,
+                                          tags: tags,
+                                          typeId: typeId,
+                                          process: process,
+                                          start: start,
+                                          end: end,
+                                        )),
+                              );
+                            },
+                            child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              strutStyle: const StrutStyle(fontSize: 12.0),
+                              text: TextSpan(
+                                text: title,
+                                style: const TextStyle(
+                                    color: Color(0xff2C406E),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    fontFamily: 'Roboto'),
+                              ),
                             ),
                           ),
                         ),

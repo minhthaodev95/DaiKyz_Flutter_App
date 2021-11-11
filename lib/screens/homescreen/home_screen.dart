@@ -93,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: tasks.length,
               itemBuilder: (context, index) => StackWidget(
                 title: tasks[index].title,
+                description: tasks[index].description,
                 tags: tasks[index].tags,
                 typeId: tasks[index].typeId,
                 process: tasks[index].process,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:Dailoz/screens/authscreens/login_screen.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -16,10 +17,10 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child: Container(
-      padding: const EdgeInsets.only(
+      child: Container(
+        padding: const EdgeInsets.only(
             top: 50.0, bottom: 60.0, left: 15.0, right: 15.0),
-      child: Column(
+        child: Column(
           children: [
             const SizedBox(
               height: 60.0,
@@ -40,9 +41,17 @@ class _SignupScreenState extends State<SignupScreen> {
               height: 60.0,
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.person),
+              decoration: InputDecoration(
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SvgPicture.asset('assets/icons/user_login_icon.svg',
+                      width: 12, height: 12),
+                ),
                 hintText: 'Username',
+                hintStyle: const TextStyle(
+                    color: Color(0xffC6CEDD),
+                    fontSize: 16,
+                    fontFamily: 'Roboto'),
               ),
             ),
             const SizedBox(
@@ -50,8 +59,13 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             TextFormField(
               decoration: const InputDecoration(
-                icon: Icon(Icons.email),
+                prefixIcon:
+                    Icon(Icons.email_outlined, color: Color(0xffA4A4A6)),
                 hintText: 'Email ID',
+                hintStyle: TextStyle(
+                    color: Color(0xffC6CEDD),
+                    fontSize: 16,
+                    fontFamily: 'Roboto'),
               ),
             ),
             const SizedBox(
@@ -60,8 +74,16 @@ class _SignupScreenState extends State<SignupScreen> {
             TextFormField(
               obscureText: _obscureText,
               decoration: InputDecoration(
-                icon: const Icon(Icons.lock),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SvgPicture.asset('assets/icons/password_icon.svg',
+                      width: 25, height: 25),
+                ),
                 hintText: 'Password',
+                hintStyle: const TextStyle(
+                    color: Color(0xffC6CEDD),
+                    fontSize: 16,
+                    fontFamily: 'Roboto'),
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
@@ -69,8 +91,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     });
                   },
                   icon: _obscureText
-                      ? const Icon(Icons.visibility_off)
-                      : const Icon(Icons.visibility),
+                      ? const Icon(Icons.visibility_off,
+                          color: Color(0xffC6CEDD))
+                      : const Icon(Icons.visibility, color: Color(0xffC6CEDD)),
                 ),
               ),
             ),
@@ -172,8 +195,8 @@ class _SignupScreenState extends State<SignupScreen> {
               ],
             )
           ],
+        ),
       ),
-    ),
-        ));
+    ));
   }
 }

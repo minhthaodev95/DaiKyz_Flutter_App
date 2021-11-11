@@ -1,10 +1,14 @@
+import 'package:Dailoz/dymmyData/data.dart';
 import 'package:Dailoz/models/task_model.dart';
+import 'package:Dailoz/models/type_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class DetailTask extends StatefulWidget {
   DetailTask(
       {required this.title,
+      required this.description,
       required this.tags,
       required this.typeId,
       required this.process,
@@ -13,6 +17,7 @@ class DetailTask extends StatefulWidget {
       Key? key})
       : super(key: key);
   final String title;
+  final String description;
   final DateTime start;
   final DateTime end;
   final List<String> tags;
@@ -48,10 +53,17 @@ class _DetailTaskState extends State<DetailTask> {
 
   @override
   Widget build(BuildContext context) {
+    TaskType taskType =
+        typeTask.where((element) => element.id == widget.typeId).elementAt(0);
+    String estDate = DateFormat('dd MMMM yyyy').format(widget.start);
+    String estTime1 = DateFormat.Hm().format(widget.start);
+    String estTime2 = DateFormat.Hm().format(widget.end);
+    String estTime3 = DateFormat('a').format(widget.end);
+
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
+        child: Padding(
+          // height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.only(
               top: 50.0, bottom: 50, left: 15.0, right: 15.0),
           child: Column(
@@ -174,26 +186,6 @@ class _DetailTaskState extends State<DetailTask> {
                     ],
                     onSelected: (item) => selectedItem(item),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {},
-                  //   child: Container(
-                  //     height: 30,
-                  //     width: 30,
-                  //     decoration: BoxDecoration(
-                  //       boxShadow: const [
-                  //         BoxShadow(
-                  //           color: Colors.white,
-                  //         ),
-                  //       ],
-                  //       borderRadius: BorderRadius.circular(14.0),
-                  //     ),
-                  //     child: Center(
-                  //       child: SvgPicture.asset(
-                  //         'assets/icons/more_horiz.svg',
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               const SizedBox(height: 20.0),
@@ -207,13 +199,24 @@ class _DetailTaskState extends State<DetailTask> {
               ),
               const SizedBox(height: 20.0),
 
-              const Text(
-                'Personal Type',
-                style: TextStyle(
-                    color: Color(0xff2E426E),
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Roboto'),
+              RichText(
+                text: TextSpan(
+                    text: taskType.title,
+                    style: const TextStyle(
+                        color: Color(0xff2E426E),
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Roboto'),
+                    children: const [
+                      TextSpan(
+                        text: ' Type',
+                        style: TextStyle(
+                            color: Color(0xff2E426E),
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Roboto'),
+                      )
+                    ]),
               ),
               const SizedBox(height: 20.0),
 
@@ -252,11 +255,11 @@ class _DetailTaskState extends State<DetailTask> {
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Roboto'),
                           ),
-                          const Text(
-                            '4 August 2021',
-                            style: TextStyle(
+                          Text(
+                            estDate,
+                            style: const TextStyle(
                                 color: Color(0xffffffff),
-                                fontSize: 18.0,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Roboto'),
                           ),
@@ -292,13 +295,48 @@ class _DetailTaskState extends State<DetailTask> {
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Roboto'),
                           ),
-                          const Text(
-                            '07:00 - 07:30 AM',
-                            style: TextStyle(
-                                color: Color(0xffffffff),
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Roboto'),
+                          RichText(
+                            text: TextSpan(
+                                text: estTime1,
+                                style: const TextStyle(
+                                    color: Color(0xffffffff),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Roboto'),
+                                children: [
+                                  const TextSpan(
+                                    text: ' - ',
+                                    style: TextStyle(
+                                        color: Color(0xffffffff),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Roboto'),
+                                  ),
+                                  TextSpan(
+                                    text: estTime2,
+                                    style: const TextStyle(
+                                        color: Color(0xffffffff),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Roboto'),
+                                  ),
+                                  const TextSpan(
+                                    text: ' ',
+                                    style: TextStyle(
+                                        color: Color(0xffffffff),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Roboto'),
+                                  ),
+                                  TextSpan(
+                                    text: estTime3,
+                                    style: const TextStyle(
+                                        color: Color(0xffffffff),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Roboto'),
+                                  ),
+                                ]),
                           ),
                         ],
                       )),
@@ -318,7 +356,6 @@ class _DetailTaskState extends State<DetailTask> {
                 padding: const EdgeInsets.only(
                     top: 5.0, left: 15.0, bottom: 15.0, right: 15.0),
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Align(
                       alignment: Alignment.topLeft,
@@ -342,18 +379,15 @@ class _DetailTaskState extends State<DetailTask> {
                     ),
                     const SizedBox(width: 18),
                     Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: Text(
-                          "Creating this month's work plan",
-                          style: TextStyle(
-                            decoration: isChecked
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            fontSize: 22.0,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.normal,
-                          ),
+                      child: Text(
+                        widget.title,
+                        style: TextStyle(
+                          decoration: isChecked
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                          fontSize: 22.0,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     )
@@ -372,12 +406,12 @@ class _DetailTaskState extends State<DetailTask> {
               ),
               const SizedBox(height: 20.0),
 
-              const Align(
+              Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                  widget.description,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
+                  style: const TextStyle(
                     decoration: TextDecoration.none,
                     fontSize: 18.0,
                     fontFamily: 'Roboto',

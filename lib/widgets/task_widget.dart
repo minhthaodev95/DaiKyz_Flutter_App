@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 class StackWidget extends StatelessWidget {
   StackWidget({
     required this.title,
+    required this.description,
     required this.tags,
     required this.typeId,
     required this.process,
@@ -17,6 +18,7 @@ class StackWidget extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
+  final String description;
   final DateTime start;
   final DateTime end;
   final List<String> tags;
@@ -105,6 +107,7 @@ class StackWidget extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) => DetailTask(
                                           title: title,
+                                          description: description,
                                           tags: tags,
                                           typeId: typeId,
                                           process: process,

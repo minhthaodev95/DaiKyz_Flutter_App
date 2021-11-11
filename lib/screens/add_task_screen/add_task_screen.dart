@@ -200,8 +200,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Padding(
+      body: IntrinsicHeight(
+          child: Container(
+        height: MediaQuery.of(context).size.height - 70,
         padding:
             const EdgeInsets.only(top: 50, bottom: 50, left: 15.0, right: 15.0),
         child: Column(
@@ -350,70 +351,107 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               width: MediaQuery.of(context).size.width,
               child: Row(
                 children: [
-                  SizedBox(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          index = 1;
-                        });
-                      },
-                      child: index == 1
-                          ? SvgPicture.asset(
-                              'assets/icons/checkbox_checked.svg')
-                          : SvgPicture.asset(
-                              'assets/icons/checkbox.svg',
-                              width: 11,
-                              height: 11,
-                              color: Colors.grey,
-                            ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        index = 1;
+                      });
+                    },
+                    child: Wrap(
+                      spacing: 3.0,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        index == 1
+                            ? SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: SvgPicture.asset(
+                                    'assets/icons/checkbox_checked.svg',
+                                    width: 12,
+                                    height: 12),
+                              )
+                            : SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: SvgPicture.asset(
+                                  'assets/icons/checkbox.svg',
+                                  width: 12,
+                                  height: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                        const Text('Personal'),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 5),
-                  const Text('Personal'),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  SizedBox(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          index = 2;
-                        });
-                      },
-                      child: index == 2
-                          ? SvgPicture.asset(
-                              'assets/icons/checkbox_checked.svg')
-                          : SvgPicture.asset(
-                              'assets/icons/checkbox.svg',
-                              width: 11,
-                              height: 11,
-                              color: Colors.grey,
-                            ),
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  const Text('Private'),
                   const SizedBox(width: 50),
-                  SizedBox(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          index = 3;
-                        });
-                      },
-                      child: index == 3
-                          ? SvgPicture.asset(
-                              'assets/icons/checkbox_checked.svg')
-                          : SvgPicture.asset(
-                              'assets/icons/checkbox.svg',
-                              width: 11,
-                              height: 11,
-                              color: Colors.grey,
-                            ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        index = 2;
+                      });
+                    },
+                    child: Wrap(
+                      spacing: 3.0,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        index == 2
+                            ? SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: SvgPicture.asset(
+                                    'assets/icons/checkbox_checked.svg',
+                                    width: 12,
+                                    height: 12),
+                              )
+                            : SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: SvgPicture.asset(
+                                  'assets/icons/checkbox.svg',
+                                  width: 12,
+                                  height: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                        const Text('Private'),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 5),
-                  const Text('Secret'),
+                  const SizedBox(width: 50),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        index = 3;
+                      });
+                    },
+                    child: Wrap(
+                      spacing: 3.0,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        index == 3
+                            ? SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: SvgPicture.asset(
+                                    'assets/icons/checkbox_checked.svg',
+                                    width: 12,
+                                    height: 12),
+                              )
+                            : SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: SvgPicture.asset(
+                                  'assets/icons/checkbox.svg',
+                                  width: 12,
+                                  height: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                        const Text('Secret'),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -467,6 +505,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
             const SizedBox(height: 20.0),
             //Create button field
+            Expanded(
+              child: Container(),
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 4,

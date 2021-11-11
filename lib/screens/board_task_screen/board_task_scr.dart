@@ -1,4 +1,5 @@
 import 'package:Dailoz/dymmyData/task_data.dart';
+import 'package:Dailoz/screens/board_task_screen/add_task_board.dart';
 import 'package:Dailoz/widgets/search_form.dart';
 import 'package:Dailoz/widgets/task_widget.dart';
 import 'package:flutter/material.dart';
@@ -8,73 +9,19 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 // import 'package:flutter/material.dart';
 
-class ProcessTask extends StatefulWidget {
-  const ProcessTask({Key? key, required this.processTitle}) : super(key: key);
+class BoardTask extends StatefulWidget {
+  const BoardTask({Key? key, required this.boardTitle}) : super(key: key);
 
-  final String processTitle;
+  final String boardTitle;
   @override
-  _ProcessTaskState createState() => _ProcessTaskState();
+  _BoardTaskState createState() => _BoardTaskState();
 }
 
-class _ProcessTaskState extends State<ProcessTask> {
+class _BoardTaskState extends State<BoardTask> {
   @override
   void initState() {
     super.initState();
     initializeDateFormatting('en_US', '');
-  }
-
-  String _oneDayFromNow(int numdays) {
-    return DateFormat('dd MMMM yyyy', 'en_US').format(DateTime.now()
-        .add(Duration(days: numdays))); // To get yesterday use "Subtract"
-  }
-
-  // show Date Rang Picker
-  late DateTimeRange selectedDate;
-  void _selectDate() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Align(
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-                color: Colors.white,
-              ),
-              height: 400,
-              width: 300,
-              child: SfDateRangePicker(
-                onSubmit: (value) {
-                  if (value is PickerDateRange) {
-                    print(value.startDate);
-                    print(value.endDate);
-                  }
-                  Navigator.pop(context);
-                },
-                initialSelectedRange: PickerDateRange(
-                  DateTime.now(),
-                  DateTime.now().add(
-                    const Duration(days: 3),
-                  ),
-                ),
-                showNavigationArrow: true,
-                view: DateRangePickerView.month,
-                selectionShape: DateRangePickerSelectionShape.circle,
-                selectionTextStyle: const TextStyle(
-                  decoration: TextDecoration.none,
-                ),
-                viewSpacing: 5,
-                showActionButtons: true,
-                confirmText: 'Save',
-                cancelText: 'Cancel',
-                selectionMode: DateRangePickerSelectionMode.range,
-                monthCellStyle: const DateRangePickerMonthCellStyle(
-                  textStyle: TextStyle(fontSize: 15, color: Colors.black),
-                ),
-              ),
-            ),
-          );
-        });
   }
 
   List<String> tags = ['Office', 'Home', 'Urgent', 'Work'];
@@ -358,15 +305,14 @@ class _ProcessTaskState extends State<ProcessTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 50, bottom: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: Stack(
+        body: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.only(
+              top: 50, bottom: 50, left: 15.0, right: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
                 children: [
                   Positioned(
                     child: GestureDetector(
@@ -394,7 +340,7 @@ class _ProcessTaskState extends State<ProcessTask> {
                   ),
                   Center(
                     child: Text(
-                      widget.processTitle,
+                      widget.boardTitle,
                       style: const TextStyle(
                         color: Color(0xff10275A),
                         fontSize: 20.0,
@@ -405,11 +351,8 @@ class _ProcessTaskState extends State<ProcessTask> {
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
+              const SizedBox(height: 25.0),
+              Row(
                 children: [
                   Expanded(child: SearchForm()),
                   const SizedBox(width: 5.0),
@@ -428,86 +371,48 @@ class _ProcessTaskState extends State<ProcessTask> {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: _selectDate,
-                    child: SvgPicture.asset('assets/icons/date_icon.svg',
-                        height: 30, width: 30),
-                  ),
-                  const SizedBox(width: 5.0),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                        DateFormat('MMMM \n yyyy').format(DateTime.now()),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                            fontFamily: 'Roboto',
-                            color: Color(0xff000000))),
-                  ),
-                ],
-              ),
-            ),
-            ListView.builder(
-              padding: const EdgeInsets.only(top: 5),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 4,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.only(left: 5.0, top: 0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10.0),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          _oneDayFromNow(index),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
-                            fontFamily: 'Roboto',
-                            color: Color(0xff525F77),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10.0),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 120.0,
-                          width: (MediaQuery.of(context).size.width - 5),
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            itemCount: tasks.length,
-                            itemBuilder: (context, index) => StackWidget(
-                              title: tasks[index].title,
-                              description: tasks[index].description,
-                              tags: tasks[index].tags,
-                              typeId: tasks[index].typeId,
-                              process: tasks[index].process,
-                              start: tasks[index].dateStart,
-                              cTitleWidth: 125,
-                              end: tasks[index].dateEnd,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              const SizedBox(height: 15.0),
+              ListView.builder(
+                padding: const EdgeInsets.only(top: 5),
+                // physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: tasks.length,
+                itemBuilder: (context, index) => StackWidget(
+                  title: tasks[index].title,
+                  description: tasks[index].description,
+                  tags: tasks[index].tags,
+                  typeId: tasks[index].typeId,
+                  process: tasks[index].process,
+                  start: tasks[index].dateStart,
+                  cTitleWidth: 125,
+                  end: tasks[index].dateEnd,
                 ),
               ),
+            ],
+          ),
+        )),
+        floatingActionButton: FloatingActionButton(
+          child: Container(
+            width: 60,
+            height: 60,
+            child: const Icon(
+              Icons.add,
+              size: 30,
             ),
-          ],
-        ),
-      )),
-    );
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                    colors: [Color(0xffA3A9D9), Color(0xff5B67CA)])),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AddTaskBoardScreen(titleBoard: widget.boardTitle),
+              ),
+            );
+          },
+        ));
   }
 }

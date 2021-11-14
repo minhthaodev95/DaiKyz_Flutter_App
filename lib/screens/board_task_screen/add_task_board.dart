@@ -243,24 +243,34 @@ class _AddTaskBoardScreenState extends State<AddTaskBoardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Stack(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Positioned(
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        height: 30,
-                        width: 30,
+                        width: 45,
+                        height: 45,
+                        padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                           boxShadow: const [
                             BoxShadow(
-                              color: Colors.white,
+                              color: Color(0xffF1F7FF),
+                              offset: Offset(-3, 7.0), //(x,y)
+                              blurRadius: 13.0,
                             ),
                           ],
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(14.0),
                         ),
+                        // margin: const EdgeInsets.only(right: 24.0),
                         child: Center(
                           child: SvgPicture.asset(
                             'assets/icons/back_arrow.svg',
@@ -293,8 +303,14 @@ class _AddTaskBoardScreenState extends State<AddTaskBoardScreen> {
                       ),
                     ),
                   ),
+                  Container(
+                    width: 45,
+                    height: 45,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
                 ],
               ),
+
               const SizedBox(height: 25.0),
               //Title field
               Text(

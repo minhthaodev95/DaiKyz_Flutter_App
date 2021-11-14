@@ -413,73 +413,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    width: 60,
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xffF1F7FF),
-                          offset: Offset(-3, 7.0), //(x,y)
-                          blurRadius: 13.0,
-                        ),
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14.0),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
                     ),
-                    margin: const EdgeInsets.only(right: 24.0),
-                    child: PopupMenuButton<int>(
-                      elevation: 4,
-                      offset: const Offset(5, 35),
-                      shape: RoundedRectangleBorder(
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0xffF1F7FF),
+                            offset: Offset(-3, 7.0), //(x,y)
+                            blurRadius: 13.0,
+                          ),
+                        ],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(14.0),
                       ),
-                      icon: SvgPicture.asset(
-                        'assets/icons/more_horiz.svg',
-                        // width: 24,
+                      margin: const EdgeInsets.only(right: 24.0),
+                      child: PopupMenuButton<int>(
+                        elevation: 4,
+                        offset: const Offset(5, 35),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                        icon: SvgPicture.asset(
+                          'assets/icons/more_horiz.svg',
+                          // width: 24,
+                        ),
+                        color: Colors.white,
+                        itemBuilder: (context) => [
+                          PopupMenuItem<int>(
+                            value: 0,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                    'assets/icons/setting_icon.svg'),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                const Text(
+                                  "Setting",
+                                  style: TextStyle(
+                                    color: Color(0xff10275A),
+                                    fontFamily: 'Roboto',
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem<int>(
+                            value: 1,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                    'assets/icons/log_out_icon.svg'),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                const Text(
+                                  "Log Out",
+                                  style: TextStyle(
+                                    color: Color(0xff10275A),
+                                    fontFamily: 'Roboto',
+                                    fontSize: 16.0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                        onSelected: (item) => selectedItem(item),
                       ),
-                      color: Colors.white,
-                      itemBuilder: (context) => [
-                        PopupMenuItem<int>(
-                          value: 0,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/setting_icon.svg'),
-                              const SizedBox(
-                                width: 7,
-                              ),
-                              const Text(
-                                "Setting",
-                                style: TextStyle(
-                                  color: Color(0xff10275A),
-                                  fontFamily: 'Roboto',
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem<int>(
-                          value: 1,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/log_out_icon.svg'),
-                              const SizedBox(
-                                width: 7,
-                              ),
-                              const Text(
-                                "Log Out",
-                                style: TextStyle(
-                                  color: Color(0xff10275A),
-                                  fontFamily: 'Roboto',
-                                  fontSize: 16.0,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                      onSelected: (item) => selectedItem(item),
                     ),
                   ),
                 ],

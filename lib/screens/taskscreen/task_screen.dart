@@ -80,46 +80,49 @@ class _TaskScreensState extends State<TaskScreens> {
               child: SearchForm(),
             ),
             const SizedBox(height: 30.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: Row(
-                children: [
-                  const Text(
-                    'Task',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF12175E),
+            IntrinsicWidth(
+              child: Container(
+                // padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                width: MediaQuery.of(context).size.width - 30,
+                child: Row(
+                  children: [
+                    const Text(
+                      'Task',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF12175E),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 190.0),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: _selectDate,
-                          child: SvgPicture.asset('assets/icons/date_icon.svg',
-                              height: 20, width: 20),
-                        ),
-                        const SizedBox(width: 5.0),
-                        ConstrainedBox(
-                          constraints:
-                              const BoxConstraints.tightFor(width: 65.0),
-                          child: const Padding(
+                    Expanded(
+                      child: Container(),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: _selectDate,
+                            child: SvgPicture.asset(
+                                'assets/icons/date_icon.svg',
+                                height: 20,
+                                width: 20),
+                          ),
+                          const SizedBox(width: 5.0),
+                          const Padding(
                             padding: EdgeInsets.only(top: 5.0),
-                            child: Text('November 2021',
+                            child: Text('November \n 2021',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Roboto',
                                     color: Color(0xff525F77))),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 10.0),

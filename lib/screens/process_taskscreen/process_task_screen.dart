@@ -366,24 +366,34 @@ class _ProcessTaskState extends State<ProcessTask> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: Stack(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Positioned(
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        height: 30,
-                        width: 30,
+                        width: 45,
+                        height: 45,
+                        padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                           boxShadow: const [
                             BoxShadow(
-                              color: Colors.white,
+                              color: Color(0xffF1F7FF),
+                              offset: Offset(-3, 7.0), //(x,y)
+                              blurRadius: 13.0,
                             ),
                           ],
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(14.0),
                         ),
+                        // margin: const EdgeInsets.only(right: 24.0),
                         child: Center(
                           child: SvgPicture.asset(
                             'assets/icons/back_arrow.svg',
@@ -392,7 +402,10 @@ class _ProcessTaskState extends State<ProcessTask> {
                       ),
                     ),
                   ),
-                  Center(
+                  Container(
+                    // width: 45,
+                    height: 45,
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       widget.processTitle,
                       style: const TextStyle(
@@ -403,8 +416,52 @@ class _ProcessTaskState extends State<ProcessTask> {
                       ),
                     ),
                   ),
+                  Container(
+                    width: 45,
+                    height: 45,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
                 ],
               ),
+              // child: Stack(
+              //   children: [
+              //     Positioned(
+              //       child: GestureDetector(
+              //         onTap: () {
+              //           Navigator.pop(context);
+              //         },
+              //         child: Container(
+              //           height: 30,
+              //           width: 30,
+              //           decoration: BoxDecoration(
+              //             boxShadow: const [
+              //               BoxShadow(
+              //                 color: Colors.white,
+              //               ),
+              //             ],
+              //             borderRadius: BorderRadius.circular(14.0),
+              //           ),
+              //           child: Center(
+              //             child: SvgPicture.asset(
+              //               'assets/icons/back_arrow.svg',
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     Center(
+              //       child: Text(
+              //         widget.processTitle,
+              //         style: const TextStyle(
+              //           color: Color(0xff10275A),
+              //           fontSize: 20.0,
+              //           fontWeight: FontWeight.bold,
+              //           fontFamily: 'Roboto',
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ),
             const SizedBox(height: 20.0),
             Padding(

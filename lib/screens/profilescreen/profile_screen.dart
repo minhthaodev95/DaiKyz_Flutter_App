@@ -421,7 +421,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Container(
                       width: 45,
                       height: 45,
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
                         boxShadow: const [
                           BoxShadow(

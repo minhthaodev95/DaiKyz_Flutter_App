@@ -6,10 +6,11 @@ import 'package:Dailoz/screens/taskscreen/widget_taskscreen/table_calendar.dart'
 import 'package:Dailoz/widgets/dot_navigation_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:Dailoz/widgets/task_widget.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 // ignore: must_be_immutable
 class TaskScreens extends StatefulWidget {
-  TaskScreens({Key? key}) : super(key: key);
+  const TaskScreens({Key? key}) : super(key: key);
 
   @override
   State<TaskScreens> createState() => _TaskScreensState();
@@ -20,21 +21,51 @@ class _TaskScreensState extends State<TaskScreens> {
 
   DateTime selectedDate = DateTime.now();
 
-  _selectDate() async {
-    final DateTime? picked = await showDatePicker(
+  void _selectDate() {
+    showDialog(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2025),
-        cancelText: 'Cancel',
-        confirmText: 'Save');
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        print(selectedDate);
-      });
-    }
+        builder: (context) {
+          return Align(
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  color: Colors.white),
+              height: 400,
+              width: 300,
+              child: SfDateRangePicker(
+                onSubmit: (value) {
+                  if (value is DateTime) {
+                    setState(() {
+                      selectedDate = value;
+                    });
+                  }
+                  Navigator.pop(context);
+                },
+                initialSelectedRange: PickerDateRange(
+                  DateTime.now(),
+                  DateTime.now().add(
+                    const Duration(days: 3),
+                  ),
+                ),
+                showNavigationArrow: true,
+                view: DateRangePickerView.month,
+                selectionShape: DateRangePickerSelectionShape.circle,
+                selectionTextStyle: const TextStyle(
+                  decoration: TextDecoration.none,
+                ),
+                viewSpacing: 5,
+                showActionButtons: true,
+                confirmText: 'Confirm',
+                cancelText: 'Cancel',
+                selectionMode: DateRangePickerSelectionMode.single,
+                monthCellStyle: const DateRangePickerMonthCellStyle(
+                  textStyle: TextStyle(fontSize: 15, color: Colors.black),
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override

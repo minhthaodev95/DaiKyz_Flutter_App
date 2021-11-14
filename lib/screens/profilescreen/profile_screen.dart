@@ -419,8 +419,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       splashColor: Colors.transparent,
                     ),
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 45,
+                      height: 45,
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         boxShadow: const [

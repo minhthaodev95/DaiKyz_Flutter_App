@@ -70,34 +70,47 @@ class _DetailTaskState extends State<DetailTask> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Row appbar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.white,
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 45,
+                        height: 45,
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0xffF1F7FF),
+                              offset: Offset(-3, 7.0), //(x,y)
+                              blurRadius: 13.0,
+                            ),
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                        // margin: const EdgeInsets.only(right: 24.0),
+                        child: Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/back_arrow.svg',
                           ),
-                        ],
-                        borderRadius: BorderRadius.circular(14.0),
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          'assets/icons/back_arrow.svg',
                         ),
                       ),
                     ),
                   ),
-                  const Center(
-                    child: Text(
+                  Container(
+                    // width: 45,
+                    height: 45,
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text(
                       'Detail',
                       style: TextStyle(
                         color: Color(0xff10275A),
@@ -107,85 +120,225 @@ class _DetailTaskState extends State<DetailTask> {
                       ),
                     ),
                   ),
-                  PopupMenuButton<int>(
-                    elevation: 4,
-                    offset: const Offset(5, 35),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14.0),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
                     ),
-                    icon: SvgPicture.asset(
-                      'assets/icons/more_horiz.svg',
-                    ),
-                    color: Colors.white,
-                    itemBuilder: (context) => [
-                      if (widget.process == ProcessType.pending)
-                        PopupMenuItem<int>(
-                          value: 0,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/enable.svg'),
-                              const SizedBox(
-                                width: 7,
-                              ),
-                              const Text("Enable")
-                            ],
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      padding: const EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0xffF1F7FF),
+                            offset: Offset(-3, 7.0), //(x,y)
+                            blurRadius: 13.0,
                           ),
-                        ),
-                      if (widget.process == ProcessType.ongoing)
-                        PopupMenuItem<int>(
-                          value: 1,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/disable.svg'),
-                              const SizedBox(
-                                width: 7,
-                              ),
-                              const Text("Disable")
-                            ],
-                          ),
-                        ),
-                      if (widget.process != ProcessType.completed)
-                        PopupMenuItem<int>(
-                          value: 2,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/edit.svg'),
-                              const SizedBox(
-                                width: 7,
-                              ),
-                              const Text("Edit")
-                            ],
-                          ),
-                        ),
-                      if (widget.process == ProcessType.completed ||
-                          widget.process == ProcessType.canceled)
-                        PopupMenuItem<int>(
-                          value: 3,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/restore.svg'),
-                              const SizedBox(
-                                width: 7,
-                              ),
-                              const Text("Restore")
-                            ],
-                          ),
-                        ),
-                      PopupMenuItem<int>(
-                        value: 4,
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/icons/delete.svg'),
-                            const SizedBox(
-                              width: 7,
-                            ),
-                            const Text("Delete")
-                          ],
-                        ),
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14.0),
                       ),
-                    ],
-                    onSelected: (item) => selectedItem(item),
+                      child: PopupMenuButton<int>(
+                        elevation: 4,
+                        offset: const Offset(5, 35),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                        icon: SvgPicture.asset(
+                          'assets/icons/more_horiz.svg',
+                        ),
+                        color: Colors.white,
+                        itemBuilder: (context) => [
+                          if (widget.process == ProcessType.pending)
+                            PopupMenuItem<int>(
+                              value: 0,
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/enable.svg'),
+                                  const SizedBox(
+                                    width: 7,
+                                  ),
+                                  const Text("Enable")
+                                ],
+                              ),
+                            ),
+                          if (widget.process == ProcessType.ongoing)
+                            PopupMenuItem<int>(
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/disable.svg'),
+                                  const SizedBox(
+                                    width: 7,
+                                  ),
+                                  const Text("Disable")
+                                ],
+                              ),
+                            ),
+                          if (widget.process != ProcessType.completed)
+                            PopupMenuItem<int>(
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/edit.svg'),
+                                  const SizedBox(
+                                    width: 7,
+                                  ),
+                                  const Text("Edit")
+                                ],
+                              ),
+                            ),
+                          if (widget.process == ProcessType.completed ||
+                              widget.process == ProcessType.canceled)
+                            PopupMenuItem<int>(
+                              value: 3,
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/restore.svg'),
+                                  const SizedBox(
+                                    width: 7,
+                                  ),
+                                  const Text("Restore")
+                                ],
+                              ),
+                            ),
+                          PopupMenuItem<int>(
+                            value: 4,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/icons/delete.svg'),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                const Text("Delete")
+                              ],
+                            ),
+                          ),
+                        ],
+                        onSelected: (item) => selectedItem(item),
+                      ),
+                    ),
                   ),
+                  // Row appbar
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.pop(context);
+                  //       },
+                  //       child: Container(
+                  //         height: 30,
+                  //         width: 30,
+                  //         decoration: BoxDecoration(
+                  //           boxShadow: const [
+                  //             BoxShadow(
+                  //               color: Colors.white,
+                  //             ),
+                  //           ],
+                  //           borderRadius: BorderRadius.circular(14.0),
+                  //         ),
+                  //         child: Center(
+                  //           child: SvgPicture.asset(
+                  //             'assets/icons/back_arrow.svg',
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     const Center(
+                  //       child: Text(
+                  //         'Detail',
+                  //         style: TextStyle(
+                  //           color: Color(0xff10275A),
+                  //           fontSize: 20.0,
+                  //           fontWeight: FontWeight.bold,
+                  //           fontFamily: 'Roboto',
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     PopupMenuButton<int>(
+                  //       elevation: 4,
+                  //       offset: const Offset(5, 35),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(14.0),
+                  //       ),
+                  //       icon: SvgPicture.asset(
+                  //         'assets/icons/more_horiz.svg',
+                  //       ),
+                  //       color: Colors.white,
+                  //       itemBuilder: (context) => [
+                  //         if (widget.process == ProcessType.pending)
+                  //           PopupMenuItem<int>(
+                  //             value: 0,
+                  //             child: Row(
+                  //               children: [
+                  //                 SvgPicture.asset('assets/icons/enable.svg'),
+                  //                 const SizedBox(
+                  //                   width: 7,
+                  //                 ),
+                  //                 const Text("Enable")
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         if (widget.process == ProcessType.ongoing)
+                  //           PopupMenuItem<int>(
+                  //             value: 1,
+                  //             child: Row(
+                  //               children: [
+                  //                 SvgPicture.asset('assets/icons/disable.svg'),
+                  //                 const SizedBox(
+                  //                   width: 7,
+                  //                 ),
+                  //                 const Text("Disable")
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         if (widget.process != ProcessType.completed)
+                  //           PopupMenuItem<int>(
+                  //             value: 2,
+                  //             child: Row(
+                  //               children: [
+                  //                 SvgPicture.asset('assets/icons/edit.svg'),
+                  //                 const SizedBox(
+                  //                   width: 7,
+                  //                 ),
+                  //                 const Text("Edit")
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         if (widget.process == ProcessType.completed ||
+                  //             widget.process == ProcessType.canceled)
+                  //           PopupMenuItem<int>(
+                  //             value: 3,
+                  //             child: Row(
+                  //               children: [
+                  //                 SvgPicture.asset('assets/icons/restore.svg'),
+                  //                 const SizedBox(
+                  //                   width: 7,
+                  //                 ),
+                  //                 const Text("Restore")
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         PopupMenuItem<int>(
+                  //           value: 4,
+                  //           child: Row(
+                  //             children: [
+                  //               SvgPicture.asset('assets/icons/delete.svg'),
+                  //               const SizedBox(
+                  //                 width: 7,
+                  //               ),
+                  //               const Text("Delete")
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //       onSelected: (item) => selectedItem(item),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
               const SizedBox(height: 20.0),

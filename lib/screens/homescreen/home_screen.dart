@@ -1,4 +1,5 @@
 import 'package:Dailoz/dymmyData/task_data.dart';
+import 'package:Dailoz/screens/taskscreen/task_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Dailoz/screens/homescreen/widget_homescreen/custom_gridview_task.dart';
 import 'package:Dailoz/widgets/dot_navigation_bar.dart';
@@ -76,7 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TaskScreens(),
+                      ),
+                    );
+                  },
                   child: const Text('View all',
                       style: TextStyle(
                           fontFamily: 'Roboto',

@@ -38,7 +38,7 @@ class OnGoingWidget extends StatelessWidget {
             Positioned(
               top: 10.0,
               left: 10.0,
-              child: Image.asset('assets/images/folder.png', scale: 0.8),
+              child: Image.asset('assets/images/folder.png', scale: 1),
             ),
             Positioned(
               top: 15.0,

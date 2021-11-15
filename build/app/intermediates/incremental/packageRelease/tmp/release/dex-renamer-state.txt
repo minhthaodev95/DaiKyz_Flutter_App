@@ -1,0 +1,4 @@
+#Mon Nov 15 13:49:24 ICT 2021
+base.0=/Users/minhthao/Desktop/DaiKyz_Flutter_App/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

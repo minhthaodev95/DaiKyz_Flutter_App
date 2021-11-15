@@ -602,14 +602,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
+                                  padding: const EdgeInsets.all(12.0),
                                   decoration: BoxDecoration(
                                     color: taskType[index].colorBackIcon,
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   height: 60,
                                   width: 60,
-                                  child:
-                                      const Icon(Icons.work_outline_outlined),
+                                  child: SvgPicture.asset(taskType[index].icon),
                                 ),
                                 const SizedBox(height: 8.0),
                                 Text(

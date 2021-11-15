@@ -5,7 +5,7 @@ class SearchForm extends StatelessWidget {
   SearchForm({
     Key? key,
   }) : super(key: key);
-  var _controller = TextEditingController();
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -15,6 +15,7 @@ class SearchForm extends StatelessWidget {
         style: const TextStyle(
             fontSize: 18.0, fontFamily: "Roboto", color: Color(0xff727EE0)),
         decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(0),
           border: const OutlineInputBorder(
             borderSide: BorderSide(
               width: 0,
@@ -26,7 +27,7 @@ class SearchForm extends StatelessWidget {
           ),
           filled: true,
           fillColor: const Color(0xffE0DEDE),
-          hintText: "Search for task",
+          hintText: "Search...",
           hintStyle: const TextStyle(
               fontSize: 18.0, fontFamily: "Roboto", color: Color(0xffB0B5DD)),
           prefixIcon: Padding(

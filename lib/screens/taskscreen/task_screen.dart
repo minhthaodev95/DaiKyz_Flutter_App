@@ -99,21 +99,17 @@ class _TaskScreensState extends State<TaskScreens> {
                       child: Container(),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: _selectDate,
                       child: Row(
                         children: [
-                          GestureDetector(
-                            onTap: _selectDate,
-                            child: SvgPicture.asset(
-                                'assets/icons/date_icon.svg',
-                                height: 20,
-                                width: 20),
-                          ),
+                          SvgPicture.asset('assets/icons/date_icon.svg',
+                              height: 20, width: 20),
                           const SizedBox(width: 5.0),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 5.0),
-                            child: Text('November \n 2021',
-                                style: TextStyle(
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Text(
+                                DateFormat('MMMM \n yyyy').format(selectedDate),
+                                style: const TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Roboto',
                                     color: Color(0xff525F77))),
@@ -126,9 +122,9 @@ class _TaskScreensState extends State<TaskScreens> {
               ),
             ),
             const SizedBox(height: 10.0),
-            const Padding(
-              padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TableCalendarWeek(),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TableCalendarWeek(selectedDay: selectedDate),
             ),
             const SizedBox(height: 5.0),
             Padding(

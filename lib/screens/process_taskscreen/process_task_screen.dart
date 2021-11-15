@@ -423,45 +423,6 @@ class _ProcessTaskState extends State<ProcessTask> {
                   ),
                 ],
               ),
-              // child: Stack(
-              //   children: [
-              //     Positioned(
-              //       child: GestureDetector(
-              //         onTap: () {
-              //           Navigator.pop(context);
-              //         },
-              //         child: Container(
-              //           height: 30,
-              //           width: 30,
-              //           decoration: BoxDecoration(
-              //             boxShadow: const [
-              //               BoxShadow(
-              //                 color: Colors.white,
-              //               ),
-              //             ],
-              //             borderRadius: BorderRadius.circular(14.0),
-              //           ),
-              //           child: Center(
-              //             child: SvgPicture.asset(
-              //               'assets/icons/back_arrow.svg',
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //     Center(
-              //       child: Text(
-              //         widget.processTitle,
-              //         style: const TextStyle(
-              //           color: Color(0xff10275A),
-              //           fontSize: 20.0,
-              //           fontWeight: FontWeight.bold,
-              //           fontFamily: 'Roboto',
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
             ),
             const SizedBox(height: 20.0),
             Padding(
@@ -488,25 +449,25 @@ class _ProcessTaskState extends State<ProcessTask> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: _selectDate,
-                    child: SvgPicture.asset('assets/icons/date_icon.svg',
+              child: GestureDetector(
+                onTap: _selectDate,
+                child: Row(
+                  children: [
+                    SvgPicture.asset('assets/icons/date_icon.svg',
                         height: 30, width: 30),
-                  ),
-                  const SizedBox(width: 5.0),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                        DateFormat('MMMM \n yyyy').format(DateTime.now()),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                            fontFamily: 'Roboto',
-                            color: Color(0xff000000))),
-                  ),
-                ],
+                    const SizedBox(width: 5.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                          DateFormat('MMMM \n yyyy').format(DateTime.now()),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              fontFamily: 'Roboto',
+                              color: Color(0xff000000))),
+                    ),
+                  ],
+                ),
               ),
             ),
             ListView.builder(

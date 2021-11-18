@@ -221,124 +221,6 @@ class _DetailTaskState extends State<DetailTask> {
                       ),
                     ),
                   ),
-                  // Row appbar
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     GestureDetector(
-                  //       onTap: () {
-                  //         Navigator.pop(context);
-                  //       },
-                  //       child: Container(
-                  //         height: 30,
-                  //         width: 30,
-                  //         decoration: BoxDecoration(
-                  //           boxShadow: const [
-                  //             BoxShadow(
-                  //               color: Colors.white,
-                  //             ),
-                  //           ],
-                  //           borderRadius: BorderRadius.circular(14.0),
-                  //         ),
-                  //         child: Center(
-                  //           child: SvgPicture.asset(
-                  //             'assets/icons/back_arrow.svg',
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     const Center(
-                  //       child: Text(
-                  //         'Detail',
-                  //         style: TextStyle(
-                  //           color: Color(0xff10275A),
-                  //           fontSize: 20.0,
-                  //           fontWeight: FontWeight.bold,
-                  //           fontFamily: 'Roboto',
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     PopupMenuButton<int>(
-                  //       elevation: 4,
-                  //       offset: const Offset(5, 35),
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(14.0),
-                  //       ),
-                  //       icon: SvgPicture.asset(
-                  //         'assets/icons/more_horiz.svg',
-                  //       ),
-                  //       color: Colors.white,
-                  //       itemBuilder: (context) => [
-                  //         if (widget.process == ProcessType.pending)
-                  //           PopupMenuItem<int>(
-                  //             value: 0,
-                  //             child: Row(
-                  //               children: [
-                  //                 SvgPicture.asset('assets/icons/enable.svg'),
-                  //                 const SizedBox(
-                  //                   width: 7,
-                  //                 ),
-                  //                 const Text("Enable")
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         if (widget.process == ProcessType.ongoing)
-                  //           PopupMenuItem<int>(
-                  //             value: 1,
-                  //             child: Row(
-                  //               children: [
-                  //                 SvgPicture.asset('assets/icons/disable.svg'),
-                  //                 const SizedBox(
-                  //                   width: 7,
-                  //                 ),
-                  //                 const Text("Disable")
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         if (widget.process != ProcessType.completed)
-                  //           PopupMenuItem<int>(
-                  //             value: 2,
-                  //             child: Row(
-                  //               children: [
-                  //                 SvgPicture.asset('assets/icons/edit.svg'),
-                  //                 const SizedBox(
-                  //                   width: 7,
-                  //                 ),
-                  //                 const Text("Edit")
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         if (widget.process == ProcessType.completed ||
-                  //             widget.process == ProcessType.canceled)
-                  //           PopupMenuItem<int>(
-                  //             value: 3,
-                  //             child: Row(
-                  //               children: [
-                  //                 SvgPicture.asset('assets/icons/restore.svg'),
-                  //                 const SizedBox(
-                  //                   width: 7,
-                  //                 ),
-                  //                 const Text("Restore")
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         PopupMenuItem<int>(
-                  //           value: 4,
-                  //           child: Row(
-                  //             children: [
-                  //               SvgPicture.asset('assets/icons/delete.svg'),
-                  //               const SizedBox(
-                  //                 width: 7,
-                  //               ),
-                  //               const Text("Delete")
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ],
-                  //       onSelected: (item) => selectedItem(item),
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
               const SizedBox(height: 20.0),
@@ -561,16 +443,28 @@ class _DetailTaskState extends State<DetailTask> {
 
               Align(
                 alignment: Alignment.center,
-                child: Text(
-                  widget.description,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    decoration: TextDecoration.none,
-                    fontSize: 18.0,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
+                child: (widget.description == '')
+                    ? const Text(
+                        'This task don\'t have a description',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontSize: 16.0,
+                          fontStyle: FontStyle.italic,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.normal,
+                        ),
+                      )
+                    : Text(
+                        widget.description,
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          decoration: TextDecoration.none,
+                          fontSize: 18.0,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
               ),
               const SizedBox(height: 20.0),
 
@@ -585,21 +479,36 @@ class _DetailTaskState extends State<DetailTask> {
               const SizedBox(height: 20.0),
 
               SizedBox(
-                child: Wrap(
-                    spacing: 15.0,
-                    children: List<Widget>.generate(
-                      widget.tags.length,
-                      (int idx) {
-                        return Chip(
-                          label: Text(widget.tags[idx],
-                              style: const TextStyle(
-                                color: Color(0xff8F81FE),
-                                fontSize: 14.0,
-                                fontFamily: 'Roboto',
-                              )),
-                        );
-                      },
-                    ).toList()),
+                child: widget.tags.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'This task don\'t have any tags',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            decoration: TextDecoration.none,
+                            fontSize: 16.0,
+                            fontStyle: FontStyle.italic,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      )
+                    : Wrap(
+                        spacing: 15.0,
+                        children: List<Widget>.generate(
+                          widget.tags.length,
+                          (int idx) {
+                            return Chip(
+                              label: Text(widget.tags[idx],
+                                  style: const TextStyle(
+                                    color: Color(0xff8F81FE),
+                                    fontSize: 14.0,
+                                    fontFamily: 'Roboto',
+                                  )),
+                            );
+                          },
+                        ).toList(),
+                      ),
               ),
             ],
           ),

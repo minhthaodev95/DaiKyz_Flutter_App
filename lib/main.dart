@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       },
       theme: ThemeData(
         // Define the default brightness and colors.
+        primaryColor: Colors.green,
         brightness: Brightness.light,
         fontFamily: 'Roboto',
       ),

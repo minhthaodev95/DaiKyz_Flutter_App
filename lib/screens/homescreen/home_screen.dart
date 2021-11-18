@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(0),
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: tasks.length,
+              itemCount: 3,
               itemBuilder: (context, index) => StackWidget(
                 title: tasks[index].title,
                 description: tasks[index].description,

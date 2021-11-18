@@ -1,3 +1,4 @@
+import 'package:Dailoz/dymmyData/data.dart';
 import 'package:Dailoz/dymmyData/task_data.dart';
 import 'package:Dailoz/models/task_model.dart';
 import 'package:Dailoz/widgets/dot_navigation_bar.dart';
@@ -22,6 +23,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   var uuid = const Uuid();
   final _controller = TextEditingController();
   final _desController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+  final _formKeyTags = GlobalKey<FormState>();
 
   // Declare Style
   TextStyle titleStyle = const TextStyle(
@@ -144,115 +148,124 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           return Dialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
-              child: Container(
-                  padding: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: Colors.white,
-                  ),
-                  height: 200,
-                  width: 300,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Text(
-                        'New Tag',
-                        style: TextStyle(
-                          color: Color(0xff10275A),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.0,
-                          fontFamily: 'Roboto',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50.0,
-                        child: TextFormField(
-                          controller: _controller,
-                          style: const TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: "Roboto",
-                              color: Color(0xff727EE0)),
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xffE0DEDE),
-                            hintText: "Tag's name",
-                            hintStyle: TextStyle(
-                                fontSize: 18.0,
-                                fontFamily: "Roboto",
-                                color: Color(0xffB0B5DD)),
+              child: Form(
+                key: _formKeyTags,
+                child: Container(
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Colors.white,
+                    ),
+                    height: 200,
+                    width: 300,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text(
+                          'New Tag',
+                          style: TextStyle(
+                            color: Color(0xff10275A),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            fontFamily: 'Roboto',
                           ),
                         ),
-                      ),
-                      Container(
-                        alignment: AlignmentDirectional.center,
-                        constraints: const BoxConstraints(minHeight: 52.0),
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: OverflowBar(
-                          spacing: 18,
-                          children: [
-                            SizedBox(
-                              width: 80.0,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors
-                                      .white, //change background color of button
-                                  onPrimary: const Color(
-                                      0xff5B67CA), //change text color of button
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      side: const BorderSide(
-                                          width: 1.0,
-                                          color: Color(0xff5B67CA))),
-                                  // elevation: 5.0,
+                        SizedBox(
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please fill a tag';
+                              }
+                              return null;
+                            },
+                            controller: _controller,
+                            style: const TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: "Roboto",
+                                color: Color(0xff727EE0)),
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
                                 ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 80.0,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: const Color(
-                                      0xff5B67CA), //change background color of button
-                                  onPrimary: const Color(
-                                      0xffffffff), //change text color of button
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      side: const BorderSide(
-                                          width: 1.0,
-                                          color: Color(0xff5B67CA))),
-                                  // elevation: 5.0,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    tags.add(_controller.value.text.toString());
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Save'),
                               ),
+                              filled: true,
+                              fillColor: Color(0xffE0DEDE),
+                              hintText: "Tag's name",
+                              hintStyle: TextStyle(
+                                  fontSize: 18.0,
+                                  fontFamily: "Roboto",
+                                  color: Color(0xffB0B5DD)),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
-                  )));
+                        Container(
+                          alignment: AlignmentDirectional.center,
+                          constraints: const BoxConstraints(minHeight: 52.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: OverflowBar(
+                            spacing: 18,
+                            children: [
+                              SizedBox(
+                                width: 80.0,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors
+                                        .white, //change background color of button
+                                    onPrimary: const Color(
+                                        0xff5B67CA), //change text color of button
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: const BorderSide(
+                                            width: 1.0,
+                                            color: Color(0xff5B67CA))),
+                                    // elevation: 5.0,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 80.0,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: const Color(
+                                        0xff5B67CA), //change background color of button
+                                    onPrimary: const Color(
+                                        0xffffffff), //change text color of button
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: const BorderSide(
+                                            width: 1.0,
+                                            color: Color(0xff5B67CA))),
+                                    // elevation: 5.0,
+                                  ),
+                                  onPressed: () {
+                                    if (_formKeyTags.currentState!.validate()) {
+                                      setState(() {
+                                        tags.add(
+                                            _controller.value.text.toString());
+                                      });
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: const Text('Save'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
+              ));
         });
   }
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -436,112 +449,60 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
                 const SizedBox(height: 25),
                 SizedBox(
-                  height: 20,
+                  height: 50,
                   width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            index = 1;
-                          });
-                        },
-                        child: Wrap(
-                          spacing: 3.0,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            index == 1
-                                ? SizedBox(
-                                    width: 15,
-                                    height: 15,
-                                    child: SvgPicture.asset(
-                                        'assets/icons/checkbox_checked.svg',
-                                        width: 12,
-                                        height: 12),
-                                  )
-                                : SizedBox(
-                                    width: 15,
-                                    height: 15,
-                                    child: SvgPicture.asset(
-                                      'assets/icons/checkbox.svg',
-                                      width: 12,
-                                      height: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                            const Text('Personal'),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 50),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            index = 2;
-                          });
-                        },
-                        child: Wrap(
-                          spacing: 3.0,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            index == 2
-                                ? SizedBox(
-                                    width: 15,
-                                    height: 15,
-                                    child: SvgPicture.asset(
-                                        'assets/icons/checkbox_checked.svg',
-                                        width: 12,
-                                        height: 12),
-                                  )
-                                : SizedBox(
-                                    width: 15,
-                                    height: 15,
-                                    child: SvgPicture.asset(
-                                      'assets/icons/checkbox.svg',
-                                      width: 12,
-                                      height: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                            const Text('Private'),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 50),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            index = 3;
-                          });
-                        },
-                        child: Wrap(
-                          spacing: 3.0,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            index == 3
-                                ? SizedBox(
-                                    width: 15,
-                                    height: 15,
-                                    child: SvgPicture.asset(
-                                        'assets/icons/checkbox_checked.svg',
-                                        width: 12,
-                                        height: 12),
-                                  )
-                                : SizedBox(
-                                    width: 15,
-                                    height: 15,
-                                    child: SvgPicture.asset(
-                                      'assets/icons/checkbox.svg',
-                                      width: 12,
-                                      height: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                            const Text('Secret'),
-                          ],
-                        ),
-                      ),
-                    ],
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 2 / 0.5,
+                    ),
+                    // scrollDirection: Axis.horizontal,
+                    // shrinkWrap: true,
+                    padding: const EdgeInsets.all(0.0),
+                    itemBuilder: (context, int idx) {
+                      return Wrap(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                index = int.parse(typeTask[idx].id);
+                              });
+                            },
+                            child: Wrap(
+                              spacing: 3.0,
+                              alignment: WrapAlignment.center,
+                              children: [
+                                // ignore: unrelated_type_equality_checks
+                                index == int.parse(typeTask[idx].id)
+                                    ? SizedBox(
+                                        width: 15,
+                                        height: 15,
+                                        child: SvgPicture.asset(
+                                            'assets/icons/checkbox_checked.svg',
+                                            width: 12,
+                                            height: 12),
+                                      )
+                                    : SizedBox(
+                                        width: 15,
+                                        height: 15,
+                                        child: SvgPicture.asset(
+                                          'assets/icons/checkbox.svg',
+                                          width: 12,
+                                          height: 12,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                Text(typeTask[idx].title),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 25.0),
+                        ],
+                      );
+                    },
+                    itemCount: typeTask.length,
                   ),
                 ),
                 const SizedBox(height: 25.0),

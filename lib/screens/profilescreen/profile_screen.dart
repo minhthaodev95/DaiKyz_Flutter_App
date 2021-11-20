@@ -1,8 +1,22 @@
+/*
+ ///  Author: Minh Thao Nguyen
+ ///  Create Time: 2021-11-14 11:29:57
+ ///  Modified by: Minh Thao Nguyen
+ ///  Modified time: 2021-11-20 03:23:58
+ ///  Description:
+ */
+
+import 'package:Dailoz/blocs/auth_bloc/bloc/auth_bloc.dart';
+import 'package:Dailoz/blocs/login_bloc/bloc/login_bloc.dart';
 import 'package:Dailoz/models/type_model.dart';
+import 'package:Dailoz/repository/user_repository.dart';
+import 'package:Dailoz/screens/authscreens/login_screen.dart';
+import 'package:Dailoz/screens/authscreens/onboarding_screen.dart';
 import 'package:Dailoz/screens/board_task_screen/board_task_scr.dart';
 import 'package:Dailoz/screens/setting_screen/setting_scr.dart';
 import 'package:flutter/material.dart';
 import 'package:Dailoz/widgets/dot_navigation_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../dymmyData/data.dart';
@@ -17,6 +31,14 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   List<TaskType> taskType = typeTask;
   int index = 1;
+  final UserRepository _userRepository = UserRepository();
+  late AuthenticationBloc _authenticationBloc;
+  @override
+  void initState() {
+    super.initState();
+    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
+    _authenticationBloc.add(AppStarted());
+  }
 
   void selectedItem(item) {
     switch (item) {
@@ -33,6 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _logOutPopup() {
+    final UserRepository _userRepository = UserRepository();
     showDialog(
         context: context,
         builder: (context) {
@@ -111,7 +134,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: Color(0xff5B67CA))),
                                   // elevation: 5.0,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  BlocProvider.of<AuthenticationBloc>(context)
+                                      .add(LoggedOut());
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginScreen()));
+                                },
                                 child: const Text('Sure'),
                               ),
                             ),
@@ -408,249 +438,266 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.only(top: 50.0),
         child: Center(
           child: SingleChildScrollView(
-              child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Theme(
-                    data: Theme.of(context).copyWith(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
+              child: BlocProvider(
+            create: (context) => _authenticationBloc,
+            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              bloc: _authenticationBloc,
+              builder: (context, state) {
+                // print(state);
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                          ),
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            padding: const EdgeInsets.all(4.0),
+                            decoration: BoxDecoration(
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0xffF1F7FF),
+                                  offset: Offset(-3, 7.0), //(x,y)
+                                  blurRadius: 13.0,
+                                ),
+                              ],
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(14.0),
+                            ),
+                            margin: const EdgeInsets.only(right: 24.0),
+                            child: PopupMenuButton<int>(
+                              elevation: 4,
+                              offset: const Offset(5, 35),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14.0),
+                              ),
+                              icon: SvgPicture.asset(
+                                'assets/icons/more_horiz.svg',
+                                // width: 24,
+                              ),
+                              color: Colors.white,
+                              itemBuilder: (context) => [
+                                PopupMenuItem<int>(
+                                  value: 0,
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                          'assets/icons/setting_icon.svg'),
+                                      const SizedBox(
+                                        width: 7,
+                                      ),
+                                      const Text(
+                                        "Setting",
+                                        style: TextStyle(
+                                          color: Color(0xff10275A),
+                                          fontFamily: 'Roboto',
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem<int>(
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                          'assets/icons/log_out_icon.svg'),
+                                      const SizedBox(
+                                        width: 7,
+                                      ),
+                                      const Text(
+                                        "Log Out",
+                                        style: TextStyle(
+                                          color: Color(0xff10275A),
+                                          fontFamily: 'Roboto',
+                                          fontSize: 16.0,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              onSelected: (item) => selectedItem(item),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Container(
-                      width: 45,
-                      height: 45,
-                      padding: const EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                        boxShadow: const [
+                    Container(
+                      decoration: const BoxDecoration(
+                        boxShadow: [
                           BoxShadow(
                             color: Color(0xffF1F7FF),
                             offset: Offset(-3, 7.0), //(x,y)
                             blurRadius: 13.0,
                           ),
                         ],
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14.0),
                       ),
-                      margin: const EdgeInsets.only(right: 24.0),
-                      child: PopupMenuButton<int>(
-                        elevation: 4,
-                        offset: const Offset(5, 35),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14.0),
-                        ),
-                        icon: SvgPicture.asset(
-                          'assets/icons/more_horiz.svg',
-                          // width: 24,
-                        ),
-                        color: Colors.white,
-                        itemBuilder: (context) => [
-                          PopupMenuItem<int>(
-                            value: 0,
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                    'assets/icons/setting_icon.svg'),
-                                const SizedBox(
-                                  width: 7,
-                                ),
-                                const Text(
-                                  "Setting",
-                                  style: TextStyle(
-                                    color: Color(0xff10275A),
-                                    fontFamily: 'Roboto',
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem<int>(
-                            value: 1,
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                    'assets/icons/log_out_icon.svg'),
-                                const SizedBox(
-                                  width: 7,
-                                ),
-                                const Text(
-                                  "Log Out",
-                                  style: TextStyle(
-                                    color: Color(0xff10275A),
-                                    fontFamily: 'Roboto',
-                                    fontSize: 16.0,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                        onSelected: (item) => selectedItem(item),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 36,
+                        child: Image.asset('assets/images/avatar.png',
+                            width: 78, height: 78),
+                        // backgroundColor: Colors.white,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xffF1F7FF),
-                      offset: Offset(-3, 7.0), //(x,y)
-                      blurRadius: 13.0,
+                    const SizedBox(height: 12.0),
+                    const Text(
+                      'Minh Thao',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Color(0xff10275A),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Roboto',
+                      ),
                     ),
-                  ],
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 36,
-                  child: Image.asset('assets/images/avatar.png',
-                      width: 78, height: 78),
-                  // backgroundColor: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 12.0),
-              const Text(
-                'Minh Thao',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Color(0xff10275A),
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                ),
-              ),
-              const SizedBox(height: 12.0),
-              const Text(
-                'minhthao.dev95@gmail.com',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xff10275A),
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Roboto',
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 30.0, left: 24.0, bottom: 15.0, right: 24.0),
-                child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
+                    const SizedBox(height: 12.0),
+                    const Text(
+                      'minhthao.dev95@gmail.com',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xff10275A),
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Roboto',
+                      ),
                     ),
-                    shrinkWrap: true,
-                    itemCount: (taskType.length + 1),
-                    itemBuilder: (context, index) {
-                      if (index == (taskType.length)) {
-                        return GestureDetector(
-                          onTap: _newBoardPopup,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xffFFEFEB),
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Center(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffF0A58E),
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  height: 60,
-                                  width: 60,
-                                  child: const Icon(Icons.add_box_outlined),
-                                ),
-                                const SizedBox(height: 8.0),
-                                const Text(
-                                  'Create Board',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff10275A),
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Roboto',
-                                  ),
-                                ),
-                              ],
-                            )),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 30.0, left: 24.0, bottom: 15.0, right: 24.0),
+                      child: GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
                           ),
-                        );
-                      } else {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BoardTask(
-                                      boardTitle: taskType[index].title)),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: taskType[index].color,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Center(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12.0),
+                          shrinkWrap: true,
+                          itemCount: (taskType.length + 1),
+                          itemBuilder: (context, index) {
+                            if (index == (taskType.length)) {
+                              return GestureDetector(
+                                onTap: _newBoardPopup,
+                                child: Container(
                                   decoration: BoxDecoration(
-                                    color: taskType[index].colorBackIcon,
-                                    borderRadius: BorderRadius.circular(12.0),
+                                    color: const Color(0xffFFEFEB),
+                                    borderRadius: BorderRadius.circular(20.0),
                                   ),
-                                  height: 60,
-                                  width: 60,
-                                  child: SvgPicture.asset(taskType[index].icon),
+                                  child: Center(
+                                      child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffF0A58E),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        height: 60,
+                                        width: 60,
+                                        child:
+                                            const Icon(Icons.add_box_outlined),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      const Text(
+                                        'Create Board',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff10275A),
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Roboto',
+                                        ),
+                                      ),
+                                    ],
+                                  )),
                                 ),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  taskType[index].title,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff10275A),
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Roboto',
+                              );
+                            } else {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => BoardTask(
+                                            boardTitle: taskType[index].title)),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: taskType[index].color,
+                                    borderRadius: BorderRadius.circular(20.0),
                                   ),
-                                ),
-                                const SizedBox(height: 8.0),
-                                RichText(
-                                  text: TextSpan(
-                                    text: taskType[index].totalTask.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff393939),
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Roboto',
-                                    ),
-                                    children: const <TextSpan>[
-                                      TextSpan(
-                                          text: ' Task',
-                                          style: TextStyle(
+                                  child: Center(
+                                      child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(12.0),
+                                        decoration: BoxDecoration(
+                                          color: taskType[index].colorBackIcon,
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        height: 60,
+                                        width: 60,
+                                        child: SvgPicture.asset(
+                                            taskType[index].icon),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      Text(
+                                        taskType[index].title,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff10275A),
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Roboto',
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: taskType[index]
+                                              .totalTask
+                                              .toString(),
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             color: Color(0xff393939),
                                             fontWeight: FontWeight.w500,
                                             fontFamily: 'Roboto',
-                                          )),
+                                          ),
+                                          children: const <TextSpan>[
+                                            TextSpan(
+                                                text: ' Task',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xff393939),
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Roboto',
+                                                )),
+                                          ],
+                                        ),
+                                      ),
                                     ],
-                                  ),
+                                  )),
                                 ),
-                              ],
-                            )),
-                          ),
-                        );
-                      }
-                    }),
-              ),
-            ],
+                              );
+                            }
+                          }),
+                    ),
+                  ],
+                );
+              },
+            ),
           )),
         ),
       ),

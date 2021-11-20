@@ -1,4 +1,11 @@
-import 'package:Dailoz/screens/taskscreen/task_screen.dart';
+/*
+ ///  Author: Minh Thao Nguyen
+ ///  Create Time: 2021-11-14 11:29:57
+ ///  Modified by: Minh Thao Nguyen
+ ///  Modified time: 2021-11-20 09:17:46
+ ///  Description:
+ */
+
 import 'package:flutter/material.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,23 +27,39 @@ class _BottomAppbarState extends State<BottomAppbar> {
   void _onItemTapped(index) {
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, "/home");
+        Navigator.pushReplacementNamed(context, "/home");
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => HomeScreen()),
+        // );
         break;
       case 1:
-        // Navigator.pushNamed(context, "/taskScreen");
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => TaskScreens()),
-        );
+        Navigator.pushReplacementNamed(context, "/taskScreen");
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => TaskScreens()),
+        // );
         break;
       case 2:
         Navigator.pushNamed(context, "/addtask");
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => AddTaskScreen()),
+        // );
         break;
       case 3:
-        Navigator.pushNamed(context, "/analyticScreen");
+        Navigator.pushReplacementNamed(context, "/analyticScreen");
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => AnalyticScreen()),
+        // );
         break;
       case 4:
-        Navigator.pushNamed(context, "/folderScreen");
+        Navigator.pushReplacementNamed(context, "/folderScreen");
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => ProfileScreen()),
+        // );
         break;
     }
   }

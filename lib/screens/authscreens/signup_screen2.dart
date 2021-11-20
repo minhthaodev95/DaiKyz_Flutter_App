@@ -1,3 +1,11 @@
+/*
+ ///  Author: Minh Thao Nguyen
+ ///  Create Time: 2021-11-14 11:29:57
+ ///  Modified by: Minh Thao Nguyen
+ ///  Modified time: 2021-11-20 03:25:25
+ ///  Description:
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:Dailoz/screens/authscreens/login_screen.dart';
@@ -178,10 +186,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 const Text("Have any account ?  "),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
                   child: const Text(
                     "Sign In",

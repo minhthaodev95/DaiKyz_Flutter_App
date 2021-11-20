@@ -53,10 +53,8 @@ class OnboardingScreen extends StatelessWidget {
                         50), // double.infinity is the width and 30 is the height
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
                   child: const Text(
                     'Login',

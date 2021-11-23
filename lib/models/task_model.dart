@@ -2,56 +2,61 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:24:58
+ ///  Modified time: 2021-11-22 16:29:05
  ///  Description:
  */
 
-enum ProcessType {
-  completed,
-  pending,
-  ongoing,
-  canceled,
-}
+// enum ProcessType {
+//   completed,
+//   pending,
+//   ongoing,
+//   canceled,
+// }
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Task {
-  String id;
+  String? id;
   String title;
   String description;
+  String dateTask;
   DateTime dateStart;
   DateTime dateEnd;
   List<String> tags;
   String typeId;
-  ProcessType process;
+  String process;
 
   Task(
-      {required this.id,
+      {this.id,
       required this.title,
       required this.description,
       required this.dateStart,
       required this.dateEnd,
+      required this.dateTask,
       required this.tags,
       required this.typeId,
       required this.process});
-  factory Task.toJson(Map<String, dynamic> json) {
+  factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-      id: json['id'],
+      id: json['id'] ?? '',
       title: json['title'],
       description: json['description'],
-      dateStart: json['dateStart'],
-      dateEnd: json['dateEnd'],
-      process: json['process'],
-      typeId: json['typeId'],
-      tags: json['tags'],
+      dateTask: json['dateTask'],
+      dateStart: (json['dateStart'] as Timestamp).toDate(),
+      dateEnd: (json['dateEnd'] as Timestamp).toDate(),
+      process: json['process'] ?? 'ongoing',
+      typeId: json['typeId'] ?? '',
+      tags: json['tags'].cast<String>(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'title': title,
       'description': description,
       'dateStart': dateStart,
       'dateEnd': dateEnd,
+      'dateTask': dateTask,
       'process': process,
       'typeId': typeId,
       'tags': tags,

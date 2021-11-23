@@ -8,10 +8,8 @@ import 'dart:async';
 import 'package:Dailoz/blocs/login_bloc/bloc/login_event.dart';
 import 'package:Dailoz/blocs/login_bloc/bloc/login_state.dart';
 import 'package:Dailoz/repository/user_repository.dart';
-import 'package:Dailoz/screens/homescreen/home_screen.dart';
 import 'package:Dailoz/validator/validator.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {

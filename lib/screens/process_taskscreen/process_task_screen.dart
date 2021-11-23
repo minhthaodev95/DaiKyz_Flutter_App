@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:26:16
+ ///  Modified time: 2021-11-21 18:56:42
  ///  Description:
  */
 
@@ -54,8 +54,8 @@ class _ProcessTaskState extends State<ProcessTask> {
               child: SfDateRangePicker(
                 onSubmit: (value) {
                   if (value is PickerDateRange) {
-                    print(value.startDate);
-                    print(value.endDate);
+                    // print(value.startDate);
+                    // print(value.endDate);
                   }
                   Navigator.pop(context);
                 },
@@ -92,7 +92,7 @@ class _ProcessTaskState extends State<ProcessTask> {
     showDialog(
         context: context,
         builder: (context) {
-          bool _selected = false;
+          // bool _selected = false;
           return StatefulBuilder(builder: (context, StateSetter setState) {
             return Dialog(
               shape: RoundedRectangleBorder(

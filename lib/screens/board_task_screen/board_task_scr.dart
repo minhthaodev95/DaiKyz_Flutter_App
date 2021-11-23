@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:25:35
+ ///  Modified time: 2021-11-21 18:55:31
  ///  Description:
  */
 
@@ -13,8 +13,6 @@ import 'package:Dailoz/widgets/task_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 // import 'package:flutter/material.dart';
 
 class BoardTask extends StatefulWidget {
@@ -39,7 +37,7 @@ class _BoardTaskState extends State<BoardTask> {
     showDialog(
         context: context,
         builder: (context) {
-          bool _selected = false;
+          // bool _selected = false;
           return StatefulBuilder(builder: (context, StateSetter setState) {
             return Dialog(
               shape: RoundedRectangleBorder(

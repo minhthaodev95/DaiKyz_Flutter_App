@@ -9,6 +9,7 @@
 import 'package:Dailoz/repository/user_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_event.dart';
@@ -29,10 +30,9 @@ class AuthenticationBloc
     try {
       final isSignIn = await userRepository.isSignIn();
       if (isSignIn) {
-        final currentUserUid = await userRepository.getUser();
-        emit(Authenticated(userUuid: currentUserUid));
+        final currentUser = await userRepository.getUser();
+        emit(Authenticated(currentUser: currentUser!));
       } else {
-        print('Uninitialized');
         emit(Uninitialized());
       }
     } catch (_) {}
@@ -40,14 +40,12 @@ class AuthenticationBloc
 
   void _mapLoggedInToState(
       LoggedIn event, Emitter<AuthenticationState> emit) async {
-    print('log in');
-    final currentUserUid = await userRepository.getUser();
-    emit(Authenticated(userUuid: currentUserUid));
+    final currentUser = await userRepository.getUser();
+    emit(Authenticated(currentUser: currentUser!));
   }
 
   void _mapLoggedOutToState(
       LoggedOut event, Emitter<AuthenticationState> emit) async {
-    print('log out');
     emit(Unauthenticated());
 
     userRepository.signOut();

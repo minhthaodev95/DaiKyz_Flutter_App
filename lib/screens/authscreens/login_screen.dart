@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:23:48
+ ///  Modified time: 2021-11-22 11:39:07
  ///  Description:
  */
 
@@ -16,7 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Dailoz/screens/homescreen/home_screen.dart';
-import 'package:Dailoz/screens/authscreens/signup_screen2.dart';
+import 'package:Dailoz/screens/authscreens/signup_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -90,9 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
                 BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
                 Future.delayed(const Duration(seconds: 2), () {
-                  print('login difRoute');
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
                 });
               }
             },
@@ -252,7 +253,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12.0)),
                               elevation: 10,
-                              onPressed: () {},
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text(
+                                            'Tính năng này hiện chưa khả dụng !!'),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.blue[600],
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           const SizedBox(

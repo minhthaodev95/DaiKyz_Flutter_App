@@ -2,11 +2,10 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:25:52
+ ///  Modified time: 2021-11-21 18:56:07
  ///  Description:
  */
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:Dailoz/screens/graphicscreen/graphic_widgets/scatter_chart.dart';
@@ -143,7 +142,6 @@ class GraphPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
     return false;
   }
 }

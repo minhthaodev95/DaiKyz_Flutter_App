@@ -2,13 +2,14 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:25:15
+ ///  Modified time: 2021-11-23 09:39:42
  ///  Description:
  */
 
 import 'package:Dailoz/dymmyData/data.dart';
-import 'package:Dailoz/dymmyData/task_data.dart';
 import 'package:Dailoz/models/task_model.dart';
+import 'package:Dailoz/repository/task_repository.dart';
+import 'package:Dailoz/screens/homescreen/home_screen.dart';
 import 'package:Dailoz/widgets/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,18 +54,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TimeOfDay _timeEnd = const TimeOfDay(hour: 7, minute: 30);
   // Date Picker
   DateTime selectedDate = DateTime.now();
-  DateTime dateStart = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      const TimeOfDay(hour: 7, minute: 00).hour,
-      const TimeOfDay(hour: 7, minute: 00).minute);
-  DateTime dateEnd = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      const TimeOfDay(hour: 7, minute: 30).hour,
-      const TimeOfDay(hour: 7, minute: 30).minute);
+  late DateTime dateStart;
+  late DateTime dateEnd;
 
   String dateInput = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
@@ -277,18 +268,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    dateStart = DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, _time.hour, _time.minute);
+    DateTime dateEnd = DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, _timeEnd.hour, _timeEnd.minute);
     return Scaffold(
       body: SingleChildScrollView(
-        child: IntrinsicHeight(
-            child: Container(
-          height: MediaQuery.of(context).size.height - 120,
+        child: Container(
+          // height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.only(
               top: 35, bottom: 0, left: 15.0, right: 15.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -347,7 +341,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 25.0),
+                const SizedBox(height: 10.0),
                 //Title field
                 Text(
                   'Title',
@@ -384,7 +378,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         onPressed: () => _selectDate(context),
                       )),
                 ),
-                const SizedBox(height: 25.0),
+                const SizedBox(height: 10.0),
                 //Time field
                 Text(
                   'Time',
@@ -436,7 +430,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     ]),
                   ),
                 ),
-                const SizedBox(height: 25.0),
+                const SizedBox(height: 10.0),
                 // Description field
                 Text(
                   'Description',
@@ -449,13 +443,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     hintText: "Description for work plan",
                   ),
                 ),
-                const SizedBox(height: 25.0),
+                const SizedBox(height: 10.0),
                 // Type field
                 Text(
                   'Type',
                   style: titleStyle,
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 10),
                 SizedBox(
                   height: 50,
                   width: MediaQuery.of(context).size.width,
@@ -513,7 +507,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     itemCount: typeTask.length,
                   ),
                 ),
-                const SizedBox(height: 25.0),
+                const SizedBox(height: 10.0),
                 // Tags field
                 Text(
                   'Tags',
@@ -562,8 +556,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                 ),
                 //Create button field
-                Expanded(
-                  child: Container(),
+                const SizedBox(
+                  height: 25.0,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -574,20 +568,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     minimumSize: const Size(double.infinity,
                         50), // double.infinity is the width and 30 is the height
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       Task newTask = Task(
-                        id: uuid.v4(),
                         title: _controller.text,
+                        dateTask: DateFormat('dd-MM-yyyy').format(selectedDate),
                         dateStart: dateStart,
                         dateEnd: dateEnd,
                         description: _desController.text,
                         typeId: index.toString(),
                         tags: tags,
-                        process: ProcessType.ongoing,
+                        process: 'ongoing',
                       );
-                      tasks.add(newTask);
-                      setState(() {});
+                      await TaskRepository().addTask(newTask).whenComplete(() =>
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen())));
                     }
                   },
                   child: const Text(
@@ -601,7 +598,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ],
             ),
           ),
-        )),
+        ),
       ),
       bottomNavigationBar: const BottomAppbar(currentIndex: 2),
       extendBody: false,

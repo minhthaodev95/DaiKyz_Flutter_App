@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-19 12:15:42
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:24:43
+ ///  Modified time: 2021-11-21 18:53:41
  ///  Description:
  */
 
@@ -17,7 +17,7 @@ class LoginState {
   final bool isFailure;
   bool get isFormValid => isEmailValid && isPasswordValid;
 
-  LoginState(
+  const LoginState(
       {required this.isEmailValid,
       required this.isFailure,
       required this.isPasswordValid,
@@ -25,7 +25,7 @@ class LoginState {
       required this.isSuccess});
 
   factory LoginState.empty() {
-    return LoginState(
+    return const LoginState(
         isEmailValid: true,
         isPasswordValid: true,
         isFailure: false,
@@ -33,7 +33,7 @@ class LoginState {
         isSuccess: false);
   }
   factory LoginState.loading() {
-    return LoginState(
+    return const LoginState(
         isEmailValid: true,
         isPasswordValid: true,
         isFailure: false,
@@ -41,7 +41,7 @@ class LoginState {
         isSuccess: false);
   }
   factory LoginState.success() {
-    return LoginState(
+    return const LoginState(
         isEmailValid: true,
         isPasswordValid: true,
         isFailure: false,
@@ -49,7 +49,7 @@ class LoginState {
         isSuccess: true);
   }
   factory LoginState.failure() {
-    return LoginState(
+    return const LoginState(
         isEmailValid: true,
         isPasswordValid: true,
         isFailure: true,

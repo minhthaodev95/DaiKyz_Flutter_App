@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:24:51
+ ///  Modified time: 2021-11-22 16:29:31
  ///  Description:
  */
 
@@ -17,38 +17,42 @@ List<Task> tasks = [
       dateEnd: DateTime.now().add(
         const Duration(minutes: 30),
       ),
+      dateTask: "22-November-2021",
       typeId: '1',
       tags: ['home', 'computer'],
-      process: ProcessType.pending),
+      process: 'pending'),
   Task(
       id: '2',
       title: 'Task 2',
       description: 'Task 2 description',
       dateStart: DateTime.parse("2021-11-06 20:18:05"),
       dateEnd: DateTime.parse("2021-11-06 20:38:05"),
+      dateTask: "22-November-2021",
       typeId: '2',
       tags: ['work', 'computer', 'Urgent'],
-      process: ProcessType.canceled),
+      process: 'canceled'),
   Task(
       id: '3',
       title: 'Task 3',
       description: 'Task 3 description',
+      dateTask: "22-November-2021",
       dateStart: DateTime.now(),
       dateEnd: DateTime.now().add(
         const Duration(minutes: 40),
       ),
       typeId: '3',
       tags: ['work', 'clothes'],
-      process: ProcessType.ongoing),
+      process: 'ongoing'),
   Task(
       id: '4',
       title: 'Task 4',
       description: 'Task 4 description',
+      dateTask: "22-November-2021",
       dateStart: DateTime.now(),
       dateEnd: DateTime.now().add(
         const Duration(minutes: 20),
       ),
       typeId: '4',
       tags: ['work', 'ipad'],
-      process: ProcessType.completed),
+      process: 'completed'),
 ];

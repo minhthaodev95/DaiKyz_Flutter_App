@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-18 16:30:05
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:23:15
+ ///  Modified time: 2021-11-20 15:48:44
  ///  Description:
  */
 
@@ -24,9 +24,9 @@ class Uninitialized extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  final String? userUuid;
+  final User currentUser;
 
-  Authenticated({required this.userUuid}) : super([userUuid]);
+  Authenticated({required this.currentUser}) : super([currentUser]);
   @override
   String toString() {
     return 'Authenticated';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Dailoz/screens/authscreens/login_screen.dart';
-import 'package:Dailoz/screens/authscreens/signup_screen2.dart';
+import 'package:Dailoz/screens/authscreens/signup_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({Key? key}) : super(key: key);

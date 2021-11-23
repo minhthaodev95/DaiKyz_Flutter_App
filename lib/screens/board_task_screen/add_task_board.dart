@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:25:30
+ ///  Modified time: 2021-11-21 18:55:14
  ///  Description:
  */
 
@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+// ignore: must_be_immutable
 class AddTaskBoardScreen extends StatefulWidget {
   AddTaskBoardScreen({Key? key, required this.titleBoard}) : super(key: key);
 

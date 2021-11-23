@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 08:57:35
+ ///  Modified time: 2021-11-21 18:56:53
  ///  Description:
  */
 
@@ -25,7 +25,7 @@ void main() async {
 
   await Firebase.initializeApp();
   runApp(
-    MyApp(),
+    const MyApp(),
   );
 }
 
@@ -53,12 +53,11 @@ class _MyAppState extends State<MyApp> {
       create: (context) => _authenticationBloc,
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          print(state);
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             routes: {
               // '/': (context) => const OnboardingScreen(),
-              '/home': (context) => HomeScreen(),
+              '/home': (context) => const HomeScreen(),
               '/taskScreen': (context) => const TaskScreens(),
               '/addtask': (context) => const AddTaskScreen(),
               '/analyticScreen': (context) => const AnalyticScreen(),
@@ -75,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 : state is Unauthenticated
                     ? LoginScreen()
                     : state is Authenticated
-                        ? HomeScreen()
+                        ? const HomeScreen()
                         : const Center(
                             child: CircularProgressIndicator(),
                           ),

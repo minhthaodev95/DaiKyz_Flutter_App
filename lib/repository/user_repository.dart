@@ -2,12 +2,11 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-18 14:58:53
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:24:03
+ ///  Modified time: 2021-11-23 11:26:08
  ///  Description:
  */
 
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:google_sign_in/google_sign_in.dart';
 
 class UserRepository {
@@ -21,16 +20,9 @@ class UserRepository {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    final String? userName = googleUser!.displayName;
-    final String? userEmail = googleUser.email;
-    final String? userUrlPhoto = googleUser.photoUrl;
-    // infomations get from google account
-    print(userName);
-    print(userEmail);
-    print(userUrlPhoto);
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+        await googleUser!.authentication;
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
@@ -39,9 +31,17 @@ class UserRepository {
     UserCredential user =
         await FirebaseAuth.instance.signInWithCredential(credential);
 
+    // final String uid = _firebaseAuth.currentUser!.uid;
     // check user login with google account first time
-    final bool firstTime = user.additionalUserInfo!.isNewUser;
-    print(firstTime);
+    // final bool firstTime = user.additionalUserInfo!.isNewUser;
+    //connect to Firebase
+    // if (firstTime) {
+    //   FirebaseFirestore.instance
+    //       .collection('users')
+    //       .doc(uid)
+    //       .collection('tasks')
+    //       .add({'title': 'Task1'});
+    // }
     // Once signed in, return the UserCredential
     return user;
   }
@@ -54,9 +54,12 @@ class UserRepository {
         email: email, password: password);
   }
 
-  Future<UserCredential> signUp(String email, String password) async {
-    return await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+  Future<UserCredential> signUp(
+      String userName, String email, String password) async {
+    UserCredential credential = await _firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password);
+    _firebaseAuth.currentUser!.updateDisplayName(userName);
+    return credential;
   }
 
   Future<bool> isSignIn() async {
@@ -70,7 +73,7 @@ class UserRepository {
     ]);
   }
 
-  Future<String?> getUser() async {
-    return _firebaseAuth.currentUser!.email;
+  Future<User?> getUser() async {
+    return _firebaseAuth.currentUser!;
   }
 }

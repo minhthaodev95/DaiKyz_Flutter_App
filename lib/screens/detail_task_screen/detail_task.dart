@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:25:42
+ ///  Modified time: 2021-11-22 14:45:23
  ///  Description:
  */
 
@@ -14,7 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class DetailTask extends StatefulWidget {
-  DetailTask(
+  const DetailTask(
       {required this.title,
       required this.description,
       required this.tags,
@@ -30,7 +30,7 @@ class DetailTask extends StatefulWidget {
   final DateTime end;
   final List<String> tags;
   final String typeId;
-  final ProcessType process;
+  final String process;
 
   @override
   _DetailTaskState createState() => _DetailTaskState();
@@ -159,7 +159,7 @@ class _DetailTaskState extends State<DetailTask> {
                         ),
                         color: Colors.white,
                         itemBuilder: (context) => [
-                          if (widget.process == ProcessType.pending)
+                          if (widget.process == 'pending')
                             PopupMenuItem<int>(
                               value: 0,
                               child: Row(
@@ -172,7 +172,7 @@ class _DetailTaskState extends State<DetailTask> {
                                 ],
                               ),
                             ),
-                          if (widget.process == ProcessType.ongoing)
+                          if (widget.process == 'ongoing')
                             PopupMenuItem<int>(
                               value: 1,
                               child: Row(
@@ -185,7 +185,7 @@ class _DetailTaskState extends State<DetailTask> {
                                 ],
                               ),
                             ),
-                          if (widget.process != ProcessType.completed)
+                          if (widget.process != 'completed')
                             PopupMenuItem<int>(
                               value: 2,
                               child: Row(
@@ -198,8 +198,8 @@ class _DetailTaskState extends State<DetailTask> {
                                 ],
                               ),
                             ),
-                          if (widget.process == ProcessType.completed ||
-                              widget.process == ProcessType.canceled)
+                          if (widget.process == 'completed' ||
+                              widget.process == 'canceled')
                             PopupMenuItem<int>(
                               value: 3,
                               child: Row(

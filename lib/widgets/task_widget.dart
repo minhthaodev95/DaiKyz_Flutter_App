@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:26:54
+ ///  Modified time: 2021-11-22 14:45:58
  ///  Description:
  */
 
@@ -31,24 +31,24 @@ class StackWidget extends StatelessWidget {
   final DateTime end;
   final List<String> tags;
   final String typeId;
-  final ProcessType process;
+  final String process;
   final double cTitleWidth;
 
   Color? _lineColor(process) {
     switch (process) {
-      case ProcessType.pending:
+      case 'pending':
         {
           return const Color(0xff8F99EB);
         }
-      case ProcessType.completed:
+      case 'completed':
         {
           return const Color(0xff7DC8E7);
         }
-      case ProcessType.ongoing:
+      case 'ongoing':
         {
           return const Color(0xff81E89E);
         }
-      case ProcessType.canceled:
+      case 'canceled':
         {
           return const Color(0xffE88B8C);
         }
@@ -193,7 +193,7 @@ class StackWidget extends StatelessWidget {
                         ),
                         color: Colors.white,
                         itemBuilder: (context) => [
-                          if (process == ProcessType.pending)
+                          if (process == 'pending')
                             PopupMenuItem<int>(
                               value: 0,
                               child: Row(
@@ -206,7 +206,7 @@ class StackWidget extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          if (process == ProcessType.ongoing)
+                          if (process == 'ongoing')
                             PopupMenuItem<int>(
                               value: 1,
                               child: Row(
@@ -219,7 +219,7 @@ class StackWidget extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          if (process != ProcessType.completed)
+                          if (process != 'completed')
                             PopupMenuItem<int>(
                               value: 2,
                               child: Row(
@@ -232,8 +232,7 @@ class StackWidget extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          if (process == ProcessType.completed ||
-                              process == ProcessType.canceled)
+                          if (process == 'completed' || process == 'canceled')
                             PopupMenuItem<int>(
                               value: 3,
                               child: Row(

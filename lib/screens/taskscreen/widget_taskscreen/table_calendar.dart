@@ -2,16 +2,17 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:26:29
+ ///  Modified time: 2021-11-23 16:39:28
  ///  Description:
  */
 
+import 'package:Dailoz/blocs/task_bloc/task_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class TableCalendarWeek extends StatefulWidget {
   TableCalendarWeek({Key? key, required this.selectedDay}) : super(key: key);
-
   DateTime focusedDay = DateTime.now();
   DateTime selectedDay;
   @override
@@ -19,6 +20,14 @@ class TableCalendarWeek extends StatefulWidget {
 }
 
 class _TableCalendarWeekState extends State<TableCalendarWeek> {
+  late TaskBloc _taskBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _taskBloc = TaskBloc();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
@@ -29,6 +38,8 @@ class _TableCalendarWeekState extends State<TableCalendarWeek> {
         setState(() {
           widget.selectedDay = selectedDay;
           widget.focusedDay = focusedDay;
+          BlocProvider.of<TaskBloc>(context)
+              .add(SelectedDayTask(daySelected: widget.selectedDay));
         });
       },
       firstDay: DateTime.utc(2010, 10, 16),

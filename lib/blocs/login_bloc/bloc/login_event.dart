@@ -2,14 +2,14 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-19 12:15:42
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:24:37
+ ///  Modified time: 2021-11-21 18:53:17
  ///  Description:
  */
 
 import 'package:equatable/equatable.dart';
 
 abstract class LoginEvent extends Equatable {
-  LoginEvent([List props = const []]) : super();
+  const LoginEvent([List props = const []]) : super();
 }
 
 class EmailChanged extends LoginEvent {

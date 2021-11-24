@@ -2,23 +2,22 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-21 18:56:53
+ ///  Modified time: 2021-11-24 17:46:10
  ///  Description:
  */
 
-import 'package:Dailoz/repository/user_repository.dart';
-import 'package:Dailoz/screens/add_task_screen/add_task_screen.dart';
-import 'package:Dailoz/screens/authscreens/login_screen.dart';
-import 'package:Dailoz/screens/authscreens/onboarding_screen.dart';
-import 'package:Dailoz/screens/graphicscreen/analytic_screen.dart';
-import 'package:Dailoz/screens/homescreen/home_screen.dart';
-import 'package:Dailoz/screens/profilescreen/profile_screen.dart';
-import 'package:Dailoz/screens/taskscreen/task_screen.dart';
+import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
+import 'package:Dailoz/src/repository/user_repository.dart';
+import 'package:Dailoz/src/screens/add_task_screen/add_task_screen.dart';
+import 'package:Dailoz/src/screens/authscreens/login_screen.dart';
+import 'package:Dailoz/src/screens/authscreens/onboarding_screen.dart';
+import 'package:Dailoz/src/screens/graphicscreen/analytic_screen.dart';
+import 'package:Dailoz/src/screens/homescreen/home_screen.dart';
+import 'package:Dailoz/src/screens/profilescreen/profile_screen.dart';
+import 'package:Dailoz/src/screens/taskscreen/task_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'blocs/auth_bloc/bloc/auth_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

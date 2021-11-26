@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:53:21
+ ///  Modified time: 2021-11-25 19:07:43
  ///  Description:
  */
 
@@ -112,7 +112,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       helpText: 'Edit time',
       context: context,
       initialTime: _time,
-      initialEntryMode: TimePickerEntryMode.input,
+      initialEntryMode: TimePickerEntryMode.dial,
     );
     if (newTime != null) {
       setState(() {
@@ -128,7 +128,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       helpText: 'Edit time',
       context: context,
       initialTime: _timeEnd,
-      initialEntryMode: TimePickerEntryMode.input,
+      initialEntryMode: TimePickerEntryMode.dial,
     );
     if (newTime != null) {
       setState(() {
@@ -571,6 +571,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       Task newTask = Task(
+                        id: '',
                         title: _controller.text,
                         dateTask: DateFormat('dd-MM-yyyy').format(selectedDate),
                         dateStart: dateStart,

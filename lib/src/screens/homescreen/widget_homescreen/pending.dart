@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:57:03
+ ///  Modified time: 2021-11-26 10:52:46
  ///  Description:
  */
 
@@ -11,10 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class PendingWidget extends StatelessWidget {
-  const PendingWidget({
-    Key? key,
-  }) : super(key: key);
-
+  const PendingWidget({Key? key, required this.num}) : super(key: key);
+  final int num;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -70,12 +68,12 @@ class PendingWidget extends StatelessWidget {
                     fontWeight: FontWeight.w600),
               ),
             ),
-            const Positioned(
+            Positioned(
                 bottom: 20.0,
                 left: 20.0,
                 child: Text(
-                  '15 Task',
-                  style: TextStyle(
+                  '$num Task',
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
                       fontFamily: 'Roboto',

@@ -2,13 +2,14 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:57:50
+ ///  Modified time: 2021-11-26 13:36:54
  ///  Description:
  */
 
 import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:Dailoz/src/blocs/task_bloc/task_bloc.dart';
 import 'package:Dailoz/src/models/task_model.dart';
+import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:Dailoz/src/repository/user_repository.dart';
 import 'package:Dailoz/src/screens/taskscreen/task_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,20 +30,31 @@ class _HomeScreenState extends State<HomeScreen> {
   final UserRepository _userRepository = UserRepository();
   late AuthenticationBloc _authenticationBloc;
   final TaskBloc _taskBloc = TaskBloc();
-  List<Task> todayTasks = [];
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-
     _authenticationBloc.add(AppStarted());
-    // getTodayTask(todayTasks);
   }
 
-  // void getTodayTask(todayTasks) async {
-  //   todayTasks = await TaskRepository().getAllTasks();
-  // }
+  _onDeleteTask(BuildContext context, id) {
+    TaskRepository().deleteTask(id);
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: DateTime.now()));
+  }
+
+  _onDisableTask(BuildContext context, id) {
+    TaskRepository().disableTask(id);
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: DateTime.now()));
+  }
+
+  _onEnableTask(BuildContext context, id) {
+    TaskRepository().enableTask(id);
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: DateTime.now()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,8 +201,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 3,
+                      itemCount: (tasks.length < 3) ? tasks.length : 3,
                       itemBuilder: (context, index) => StackWidget(
+                        id: tasks[index].id,
                         title: tasks[index].title,
                         description: tasks[index].description,
                         tags: tasks[index].tags,
@@ -199,6 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         start: tasks[index].dateStart,
                         end: tasks[index].dateEnd,
                         cTitleWidth: 200,
+                        kWidth: 220,
+                        onDelete: () => _onDeleteTask(context, tasks[index].id),
+                        onDisable: () =>
+                            _onDisableTask(context, tasks[index].id),
+                        onEnable: () => _onEnableTask(context, tasks[index].id),
                       ),
                     );
                   }

@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:54:39
+ ///  Modified time: 2021-11-25 19:07:19
  ///  Description:
  */
 
@@ -101,7 +101,7 @@ class _AddTaskBoardScreenState extends State<AddTaskBoardScreen> {
       helpText: 'Edit time',
       context: context,
       initialTime: _time,
-      initialEntryMode: TimePickerEntryMode.input,
+      initialEntryMode: TimePickerEntryMode.dial,
     );
     if (newTime != null) {
       setState(() {
@@ -115,7 +115,7 @@ class _AddTaskBoardScreenState extends State<AddTaskBoardScreen> {
       helpText: 'Edit time',
       context: context,
       initialTime: _timeEnd,
-      initialEntryMode: TimePickerEntryMode.input,
+      initialEntryMode: TimePickerEntryMode.dial,
     );
     if (newTime != null) {
       setState(() {

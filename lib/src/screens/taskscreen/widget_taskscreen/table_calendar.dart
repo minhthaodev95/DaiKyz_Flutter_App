@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:49:48
+ ///  Modified time: 2021-11-25 09:55:08
  ///  Description:
  */
 
@@ -12,9 +12,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class TableCalendarWeek extends StatefulWidget {
-  TableCalendarWeek({Key? key, required this.selectedDay}) : super(key: key);
+  TableCalendarWeek({Key? key, required this.selectedDay, required this.date})
+      : super(key: key);
   DateTime focusedDay = DateTime.now();
   DateTime selectedDay;
+  final Function date;
+
   @override
   State<TableCalendarWeek> createState() => _TableCalendarWeekState();
 }
@@ -38,6 +41,7 @@ class _TableCalendarWeekState extends State<TableCalendarWeek> {
         setState(() {
           widget.selectedDay = selectedDay;
           widget.focusedDay = focusedDay;
+          widget.date(selectedDay);
           BlocProvider.of<TaskBloc>(context)
               .add(SelectedDayTask(daySelected: widget.selectedDay));
         });

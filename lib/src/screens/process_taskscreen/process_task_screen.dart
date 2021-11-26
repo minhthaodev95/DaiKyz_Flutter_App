@@ -2,14 +2,16 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:58:17
+ ///  Modified time: 2021-11-26 14:16:54
  ///  Description:
  */
 
-import 'package:Dailoz/src/data/dymmyData/task_data.dart';
+import 'package:Dailoz/src/blocs/task_bloc/task_bloc.dart';
+import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:Dailoz/src/screens/widgets/search_form.dart';
 import 'package:Dailoz/src/screens/widgets/task_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -25,15 +27,29 @@ class ProcessTask extends StatefulWidget {
 }
 
 class _ProcessTaskState extends State<ProcessTask> {
+  DateTime dayStart = DateTime.now();
+  DateTime dayEnd = DateTime.now().add(const Duration(days: 3));
+  late TaskBloc _taskBloc;
+  int _daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to.difference(from).inHours / 24).round();
+  }
+
+  String _titleDay(int numdays, DateTime dateStart) {
+    return DateFormat('dd MMMM yyyy', 'en_US').format(dateStart
+        .add(Duration(days: numdays))); // To get yesterday use "Subtract"
+  }
+
+  DateTime _eachDay(int index, DateTime dateStart) {
+    return dateStart.add(Duration(days: index));
+  }
+
   @override
   void initState() {
     super.initState();
     initializeDateFormatting('en_US', '');
-  }
-
-  String _oneDayFromNow(int numdays) {
-    return DateFormat('dd MMMM yyyy', 'en_US').format(DateTime.now()
-        .add(Duration(days: numdays))); // To get yesterday use "Subtract"
+    _taskBloc = TaskBloc();
   }
 
   // show Date Rang Picker
@@ -54,16 +70,18 @@ class _ProcessTaskState extends State<ProcessTask> {
               child: SfDateRangePicker(
                 onSubmit: (value) {
                   if (value is PickerDateRange) {
-                    // print(value.startDate);
-                    // print(value.endDate);
+                    if (value.startDate != null && value.endDate != null) {
+                      setState(() {
+                        dayStart = value.startDate!;
+                        dayEnd = value.endDate!;
+                      });
+                    }
                   }
                   Navigator.pop(context);
                 },
                 initialSelectedRange: PickerDateRange(
-                  DateTime.now(),
-                  DateTime.now().add(
-                    const Duration(days: 3),
-                  ),
+                  dayStart,
+                  dayEnd,
                 ),
                 showNavigationArrow: true,
                 view: DateRangePickerView.month,
@@ -363,177 +381,295 @@ class _ProcessTaskState extends State<ProcessTask> {
         });
   }
 
+  _onDeleteTask(BuildContext context, id) {
+    TaskRepository().deleteTask(id);
+    setState(() {});
+  }
+
+  _onDisableTask(BuildContext context, id) {
+    TaskRepository().disableTask(id);
+    setState(() {});
+  }
+
+  _onEnableTask(BuildContext context, id) {
+    TaskRepository().enableTask(id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    int difference = _daysBetween(dayStart, dayEnd);
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 50, bottom: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Theme(
-                    data: Theme.of(context).copyWith(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        width: 45,
-                        height: 45,
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color(0xffF1F7FF),
-                              offset: Offset(-3, 7.0), //(x,y)
-                              blurRadius: 13.0,
+      body: BlocProvider(
+        create: (context) => _taskBloc,
+        child: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.only(top: 50, bottom: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0xffF1F7FF),
+                                offset: Offset(-3, 7.0), //(x,y)
+                                blurRadius: 13.0,
+                              ),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          // margin: const EdgeInsets.only(right: 24.0),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              'assets/icons/back_arrow.svg',
                             ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14.0),
-                        ),
-                        // margin: const EdgeInsets.only(right: 24.0),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            'assets/icons/back_arrow.svg',
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    // width: 45,
-                    height: 45,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      widget.processTitle,
-                      style: const TextStyle(
-                        color: Color(0xff10275A),
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Roboto',
+                    Container(
+                      // width: 45,
+                      height: 45,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        widget.processTitle,
+                        style: const TextStyle(
+                          color: Color(0xff10275A),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Roboto',
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 45,
-                    height: 45,
-                    padding: const EdgeInsets.all(8.0),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                children: [
-                  Expanded(child: SearchForm()),
-                  const SizedBox(width: 5.0),
-                  GestureDetector(
-                    onTap: _selectFilter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.0),
-                        color: const Color(0xffE0DEDE),
-                      ),
-                      width: 50.0,
-                      height: 50.0,
-                      padding: const EdgeInsets.all(12.0),
-                      child: SvgPicture.asset('assets/icons/filter.svg'),
+                    Container(
+                      width: 45,
+                      height: 45,
+                      padding: const EdgeInsets.all(8.0),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: GestureDetector(
-                onTap: _selectDate,
+              const SizedBox(height: 20.0),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
                 child: Row(
                   children: [
-                    SvgPicture.asset('assets/icons/date_icon.svg',
-                        height: 30, width: 30),
+                    Expanded(child: SearchForm()),
                     const SizedBox(width: 5.0),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Text(
-                          DateFormat('MMMM \n yyyy').format(DateTime.now()),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              fontFamily: 'Roboto',
-                              color: Color(0xff000000))),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            ListView.builder(
-              padding: const EdgeInsets.only(top: 5),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 4,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.only(left: 5.0, top: 0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10.0),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          _oneDayFromNow(index),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
-                            fontFamily: 'Roboto',
-                            color: Color(0xff525F77),
-                          ),
+                    GestureDetector(
+                      onTap: _selectFilter,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: const Color(0xffE0DEDE),
                         ),
+                        width: 50.0,
+                        height: 50.0,
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset('assets/icons/filter.svg'),
                       ),
                     ),
-                    const SizedBox(height: 10.0),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 120.0,
-                          width: (MediaQuery.of(context).size.width - 5),
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            itemCount: tasks.length,
-                            itemBuilder: (context, index) => StackWidget(
-                              title: tasks[index].title,
-                              description: tasks[index].description,
-                              tags: tasks[index].tags,
-                              typeId: tasks[index].typeId,
-                              process: tasks[index].process,
-                              start: tasks[index].dateStart,
-                              cTitleWidth: 125,
-                              end: tasks[index].dateEnd,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-      )),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: GestureDetector(
+                  onTap: _selectDate,
+                  child: Row(
+                    children: [
+                      SvgPicture.asset('assets/icons/date_icon.svg',
+                          height: 30, width: 30),
+                      const SizedBox(width: 5.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text(
+                            DateFormat('MMMM \n yyyy').format(DateTime.now()),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                fontFamily: 'Roboto',
+                                color: Color(0xff000000))),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              ListView.builder(
+                  padding: const EdgeInsets.only(top: 5),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: difference + 1,
+                  itemBuilder: (context, idx) {
+                    // _getTaskbyDate(_eachDay(idx, dayStart));
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 5.0, top: 0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10.0),
+                          Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15.0),
+                              child: Text(
+                                _titleDay(idx, dayStart),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  fontFamily: 'Roboto',
+                                  color: Color(0xff525F77),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10.0),
+                          FutureBuilder(
+                              future: TaskRepository().getAllTasksByProcess(
+                                  _eachDay(idx, dayStart),
+                                  widget.processTitle.toLowerCase()),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshots) {
+                                if (!snapshots.hasData) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else if (snapshots.data.isEmpty) {
+                                  return const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 8.0, bottom: 8.0),
+                                      child: Text(
+                                        'You don’t have any schedule.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Color(0xff575757),
+                                          fontSize: 12.0,
+                                          fontStyle: FontStyle.italic,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Roboto',
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return snapshots.data!.length == 1
+                                      ? SizedBox(
+                                          height: 120.0,
+                                          width: (MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              5),
+                                          child: ListView.builder(
+                                            padding: const EdgeInsets.all(0),
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: snapshots.data!.length,
+                                            itemBuilder: (context, idx) =>
+                                                StackWidget(
+                                              id: snapshots.data![idx].id,
+                                              title: snapshots.data![idx].title,
+                                              description: snapshots
+                                                  .data![idx].description,
+                                              tags: snapshots.data![idx].tags,
+                                              typeId:
+                                                  snapshots.data![idx].typeId,
+                                              process:
+                                                  snapshots.data![idx].process,
+                                              start: snapshots
+                                                  .data![idx].dateStart,
+                                              end: snapshots.data![idx].dateEnd,
+                                              cTitleWidth: 220,
+                                              kWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  20,
+                                              onDelete: () => _onDeleteTask(
+                                                  context,
+                                                  snapshots.data![idx].id),
+                                              onDisable: () => _onDisableTask(
+                                                  context,
+                                                  snapshots.data![idx].id),
+                                              onEnable: () => _onEnableTask(
+                                                  context,
+                                                  snapshots.data![idx].id),
+                                            ),
+                                          ),
+                                        )
+                                      : Row(children: [
+                                          SizedBox(
+                                            height: 120.0,
+                                            width: (MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                5),
+                                            child: ListView.builder(
+                                              padding: const EdgeInsets.all(0),
+                                              scrollDirection: Axis.horizontal,
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: snapshots.data!.length,
+                                              itemBuilder: (context, idx) =>
+                                                  StackWidget(
+                                                id: snapshots.data![idx].id,
+                                                title:
+                                                    snapshots.data![idx].title,
+                                                description: snapshots
+                                                    .data![idx].description,
+                                                tags: snapshots.data![idx].tags,
+                                                typeId:
+                                                    snapshots.data![idx].typeId,
+                                                process: snapshots
+                                                    .data![idx].process,
+                                                start: snapshots
+                                                    .data![idx].dateStart,
+                                                end: snapshots
+                                                    .data![idx].dateEnd,
+                                                cTitleWidth: 125,
+                                                kWidth: 220,
+                                                onDelete: () => _onDeleteTask(
+                                                    context,
+                                                    snapshots.data![idx].id),
+                                                onDisable: () => _onDisableTask(
+                                                    context,
+                                                    snapshots.data![idx].id),
+                                                onEnable: () => _onEnableTask(
+                                                    context,
+                                                    snapshots.data![idx].id),
+                                              ),
+                                            ),
+                                          ),
+                                        ]);
+                                }
+                              }),
+                        ],
+                      ),
+                    );
+                  }),
+            ],
+          ),
+        )),
+      ),
     );
   }
 }

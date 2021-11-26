@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:25:07
+ ///  Modified time: 2021-11-25 12:50:42
  ///  Description:
  */
 
@@ -12,8 +12,9 @@ class TaskType {
   final String id;
   final String title;
   final String icon;
-  final Color color;
-  final Color colorBackIcon;
+  final String color;
+  final double opacity;
+  final String colorBoxIcon;
   final int totalTask;
 
   TaskType({
@@ -21,7 +22,8 @@ class TaskType {
     required this.title,
     required this.icon,
     required this.color,
-    required this.colorBackIcon,
+    required this.opacity,
+    required this.colorBoxIcon,
     required this.totalTask,
   });
 
@@ -31,7 +33,8 @@ class TaskType {
       title: json['title'],
       icon: json['icon'],
       color: json['color'],
-      colorBackIcon: json['colorBackIcon'],
+      opacity: json['opacity'],
+      colorBoxIcon: json['colorBoxIcon'],
       totalTask: json['totalTask'],
     );
   }
@@ -42,7 +45,8 @@ class TaskType {
       'title': title,
       'icon': icon,
       'color': color,
-      'colorBackIcon': colorBackIcon,
+      'opacity': opacity,
+      'colorBoxIcon': colorBoxIcon,
       'totalTask': totalTask,
     };
   }

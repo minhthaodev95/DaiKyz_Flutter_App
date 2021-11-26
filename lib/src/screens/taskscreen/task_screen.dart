@@ -2,12 +2,13 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:48:26
+ ///  Modified time: 2021-11-26 09:13:31
  ///  Description:
  */
 
 import 'package:Dailoz/src/blocs/task_bloc/task_bloc.dart';
 import 'package:Dailoz/src/models/task_model.dart';
+import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:Dailoz/src/screens/taskscreen/widget_taskscreen/table_calendar.dart';
 import 'package:Dailoz/src/screens/widgets/dot_navigation_bar.dart';
 import 'package:Dailoz/src/screens/widgets/search_form.dart';
@@ -97,6 +98,24 @@ class _TaskScreensState extends State<TaskScreens> {
   //       });
   // }
 
+  _onDeleteTask(BuildContext context, id) {
+    TaskRepository().deleteTask(id);
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: selectedDate));
+  }
+
+  _onDisableTask(BuildContext context, id) {
+    TaskRepository().disableTask(id);
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: selectedDate));
+  }
+
+  _onEnableTask(BuildContext context, id) {
+    TaskRepository().enableTask(id);
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: selectedDate));
+  }
+
   @override
   Widget build(BuildContext context) {
     // print(selectedDate);
@@ -151,35 +170,47 @@ class _TaskScreensState extends State<TaskScreens> {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                TableCalendarWeek(selectedDay: selectedDate),
+                TableCalendarWeek(
+                    selectedDay: selectedDate,
+                    date: (date) {
+                      selectedDate = date;
+                    }),
                 const SizedBox(height: 5.0),
-                Row(
-                  children: [
-                    const Text(
-                      'Today',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Color(0xff10275A),
-                      ),
+                IntrinsicWidth(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Today',
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                            color: Color(0xff10275A),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        Text(
+                          dateString,
+                          style: const TextStyle(
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                            color: Color(0xff000000),
+                          ),
+                        )
+                      ],
                     ),
-                    const SizedBox(width: 220.0),
-                    Text(
-                      dateString,
-                      style: const TextStyle(
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                        color: Color(0xff000000),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
                 BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
                   // print('State ScreecTask : $state');
                   if (state is TaskDaySelectedLoaded) {
                     List<Task>? tasks = state.taskSelectedDay;
+                    // print(tasks[0].id);
                     if (tasks.isEmpty) {
                       return Center(
                         child: Padding(
@@ -212,6 +243,7 @@ class _TaskScreensState extends State<TaskScreens> {
                         shrinkWrap: true,
                         itemCount: tasks.length,
                         itemBuilder: (context, index) => StackWidget(
+                          id: tasks[index].id,
                           title: tasks[index].title,
                           description: tasks[index].description,
                           tags: tasks[index].tags,
@@ -220,6 +252,13 @@ class _TaskScreensState extends State<TaskScreens> {
                           start: tasks[index].dateStart,
                           end: tasks[index].dateEnd,
                           cTitleWidth: 200,
+                          kWidth: 200,
+                          onDelete: () =>
+                              _onDeleteTask(context, tasks[index].id),
+                          onDisable: () =>
+                              _onDisableTask(context, tasks[index].id),
+                          onEnable: () =>
+                              _onEnableTask(context, tasks[index].id),
                         ),
                       );
                     }

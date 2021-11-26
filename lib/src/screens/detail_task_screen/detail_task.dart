@@ -2,19 +2,21 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:55:44
+ ///  Modified time: 2021-11-25 11:13:45
  ///  Description:
  */
 
 import 'package:Dailoz/src/data/dymmyData/data.dart';
 import 'package:Dailoz/src/models/type_model.dart';
+import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class DetailTask extends StatefulWidget {
   const DetailTask(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.description,
       required this.tags,
       required this.typeId,
@@ -23,6 +25,7 @@ class DetailTask extends StatefulWidget {
       required this.end,
       Key? key})
       : super(key: key);
+  final String id;
   final String title;
   final String description;
   final DateTime start;
@@ -36,7 +39,14 @@ class DetailTask extends StatefulWidget {
 }
 
 class _DetailTaskState extends State<DetailTask> {
-  bool isChecked = false;
+  late bool isChecked;
+
+  @override
+  void initState() {
+    widget.process == 'completed' ? isChecked = true : isChecked = false;
+    super.initState();
+  }
+
   // List<String> tags = ['Office', 'Home', 'Urgent'];
   void selectedItem(item) {
     switch (item) {
@@ -404,7 +414,13 @@ class _DetailTaskState extends State<DetailTask> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            isChecked = !isChecked;
+                            if (!isChecked) {
+                              TaskRepository().completedTask(widget.id);
+                              isChecked = !isChecked;
+                            } else {
+                              TaskRepository().enableTask(widget.id);
+                              isChecked = !isChecked;
+                            }
                           });
                         },
                         child: isChecked

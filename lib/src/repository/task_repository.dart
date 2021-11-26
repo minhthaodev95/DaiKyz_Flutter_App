@@ -10,16 +10,7 @@ class TaskRepository {
 
   Future<List<Task>> getAllTasks(DateTime selectedTime) async {
     String _currentUserUid = _firebaseAuth.currentUser!.uid;
-    // FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(_currentUserUid)
-    //     .collection('tasks')
-    //     .doc()
-    //     .set({
-    //   "title": "Hoem Coming",
-    //   "type": "Procesing",
-    //   "description": "Description of the HomeComing"
-    // });
+
     QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
         .instance
         .collection('users')
@@ -35,13 +26,60 @@ class TaskRepository {
           .where((element) =>
               element['dateTask'] ==
               DateFormat('dd-MM-yyyy').format(selectedTime))
-          .map((element) => Task.fromJson(element.data()))
-          .toList();
+          .map((element) {
+        return Task.fromJson(element.data(), element.id);
+      }).toList();
 
       return allTasks;
     }
 
     return [];
+  }
+
+  Future<List<Task>> getAllTasksByProcess(
+      DateTime selectedTime, String process) async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .where('process', isEqualTo: process)
+        .orderBy('dateStart', descending: false)
+        .get();
+
+    // Check day of task
+
+    if (response.size > 0) {
+      List<Task> allTasks = response.docs
+          .where((element) =>
+              element['dateTask'] ==
+              DateFormat('dd-MM-yyyy').format(selectedTime))
+          .map((element) {
+        return Task.fromJson(element.data(), element.id);
+      }).toList();
+
+      return allTasks;
+    }
+
+    return [];
+  }
+
+  // Get number of task by process
+
+  Future<int> numberTask(String process) async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .where('process', isEqualTo: process)
+        .get();
+    int totalTask = response.docs.length;
+    return totalTask;
   }
 
   //add NewTask to Firebase
@@ -55,5 +93,60 @@ class TaskRepository {
         .collection('tasks')
         .doc()
         .set(task);
+  }
+
+  Future<void> deleteTask(String id) {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .doc(id)
+        .delete();
+  }
+
+  Future<void> disableTask(String id) {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .doc(id)
+        .update({"process": "pending"});
+  }
+
+  Future<void> restoreTask(String id) {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .doc(id)
+        .update({"process": "ongoing"});
+  }
+
+  Future<void> completedTask(String id) {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .doc(id)
+        .update({"process": "completed"});
+  }
+
+  Future<void> enableTask(String id) {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .doc(id)
+        .update({"process": "ongoing"});
   }
 }

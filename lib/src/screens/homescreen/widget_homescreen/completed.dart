@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:26:00
+ ///  Modified time: 2021-11-26 14:09:08
  ///  Description:
  */
 
@@ -11,10 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CompletedWidget extends StatelessWidget {
-  const CompletedWidget({
-    Key? key,
-  }) : super(key: key);
-
+  const CompletedWidget({Key? key, required this.num}) : super(key: key);
+  final int num;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -22,8 +20,7 @@ class CompletedWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                const ProcessTask(processTitle: 'Conpleted Tasks'),
+            builder: (context) => const ProcessTask(processTitle: 'Completed'),
           ),
         );
       },
@@ -67,12 +64,12 @@ class CompletedWidget extends StatelessWidget {
                     fontWeight: FontWeight.w600),
               ),
             ),
-            const Positioned(
+            Positioned(
                 bottom: 20.0,
                 left: 20.0,
                 child: Text(
-                  '86 Task',
-                  style: TextStyle(
+                  '$num Task',
+                  style: const TextStyle(
                       color: Color(0xff12175E),
                       fontSize: 14,
                       fontFamily: 'Roboto',

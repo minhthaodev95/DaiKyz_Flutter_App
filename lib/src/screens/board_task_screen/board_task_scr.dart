@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:55:26
+ ///  Modified time: 2021-11-26 13:34:56
  ///  Description:
  */
 
@@ -441,13 +441,15 @@ class _BoardTaskState extends State<BoardTask> {
                 shrinkWrap: true,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) => StackWidget(
+                  id: '',
                   title: tasks[index].title,
                   description: tasks[index].description,
                   tags: tasks[index].tags,
                   typeId: tasks[index].typeId,
                   process: tasks[index].process,
                   start: tasks[index].dateStart,
-                  cTitleWidth: 125,
+                  cTitleWidth: 200,
+                  kWidth: 220,
                   end: tasks[index].dateEnd,
                 ),
               ),

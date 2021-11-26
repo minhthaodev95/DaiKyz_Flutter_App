@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:46:10
+ ///  Modified time: 2021-11-25 17:41:14
  ///  Description:
  */
 
@@ -52,6 +52,27 @@ class _MyAppState extends State<MyApp> {
       create: (context) => _authenticationBloc,
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
+          late String userName;
+          late String userEmail;
+          late String photoUrl;
+          if (state is Authenticated) {
+            (state.currentUser.displayName != null)
+                ? userName = state.currentUser.displayName!
+                : userName = "Bob";
+            (state.currentUser.email != null)
+                ? userEmail = state.currentUser.email!
+                : userEmail = "user@admin.com";
+
+            (state.currentUser.photoURL != null)
+                ? photoUrl = state.currentUser.photoURL!
+                : photoUrl =
+                    "https://yorktonrentals.com/wp-content/uploads/2017/06/usericon.png";
+          }
+          if (state is Uninitialized) {
+            userName = 'Bob';
+            photoUrl =
+                "https://yorktonrentals.com/wp-content/uploads/2017/06/usericon.png";
+          }
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             routes: {
@@ -60,7 +81,8 @@ class _MyAppState extends State<MyApp> {
               '/taskScreen': (context) => const TaskScreens(),
               '/addtask': (context) => const AddTaskScreen(),
               '/analyticScreen': (context) => const AnalyticScreen(),
-              '/folderScreen': (context) => ProfileScreen(),
+              '/folderScreen': (context) => ProfileScreen(
+                  username: userName, photoUrl: photoUrl, email: userEmail),
             },
             theme: ThemeData(
               // Define the default brightness and colors.

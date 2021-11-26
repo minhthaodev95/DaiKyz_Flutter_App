@@ -2,11 +2,12 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:59:19
+ ///  Modified time: 2021-11-25 17:37:38
  ///  Description:
  */
 
 import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
+import 'package:Dailoz/src/blocs/board_bloc/board_bloc.dart';
 import 'package:Dailoz/src/data/dymmyData/data.dart';
 import 'package:Dailoz/src/models/type_model.dart';
 import 'package:Dailoz/src/repository/user_repository.dart';
@@ -19,21 +20,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen(
+      {Key? key,
+      required this.username,
+      required this.photoUrl,
+      required this.email})
+      : super(key: key);
+  final String username;
+  final String email;
+  final String photoUrl;
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  List<TaskType> taskType = typeTask;
+  late List<TaskType> taskType = typeTask;
   int index = 1;
   final UserRepository _userRepository = UserRepository();
   late AuthenticationBloc _authenticationBloc;
+  late BoardBloc _boardBloc;
   @override
   void initState() {
     super.initState();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.add(AppStarted());
+    _boardBloc = BoardBloc();
+    _boardBloc.add(LoadBoard());
   }
 
   void selectedItem(item) {
@@ -51,7 +63,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _logOutPopup() {
-    final UserRepository _userRepository = UserRepository();
     showDialog(
         context: context,
         builder: (context) {
@@ -434,12 +445,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.only(top: 50.0),
         child: Center(
           child: SingleChildScrollView(
-              child: BlocProvider(
-            create: (context) => _authenticationBloc,
+              child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => _authenticationBloc,
+              ),
+              BlocProvider(
+                create: (context) => BoardBloc(),
+              ),
+            ],
             child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               bloc: _authenticationBloc,
               builder: (context, state) {
-                // print(state);
                 return Column(
                   children: [
                     Row(
@@ -536,17 +553,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 36,
-                        child: Image.asset('assets/images/avatar.png',
-                            width: 78, height: 78),
-                        // backgroundColor: Colors.white,
+                        backgroundColor: Colors.brown.shade800,
+                        backgroundImage: NetworkImage(widget.photoUrl),
                       ),
                     ),
                     const SizedBox(height: 12.0),
-                    const Text(
-                      'Minh Thao',
-                      style: TextStyle(
+                    Text(
+                      widget.username,
+                      style: const TextStyle(
                         fontSize: 24,
                         color: Color(0xff10275A),
                         fontWeight: FontWeight.bold,
@@ -554,9 +568,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 12.0),
-                    const Text(
-                      'minhthao.dev95@gmail.com',
-                      style: TextStyle(
+                    Text(
+                      widget.email,
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Color(0xff10275A),
                         fontWeight: FontWeight.normal,
@@ -566,129 +580,155 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 30.0, left: 24.0, bottom: 15.0, right: 24.0),
-                      child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                          ),
-                          shrinkWrap: true,
-                          itemCount: (taskType.length + 1),
-                          itemBuilder: (context, index) {
-                            if (index == (taskType.length)) {
-                              return GestureDetector(
-                                onTap: _newBoardPopup,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffFFEFEB),
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Center(
-                                      child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xffF0A58E),
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                        height: 60,
-                                        width: 60,
-                                        child:
-                                            const Icon(Icons.add_box_outlined),
-                                      ),
-                                      const SizedBox(height: 8.0),
-                                      const Text(
-                                        'Create Board',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xff10275A),
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Roboto',
-                                        ),
-                                      ),
-                                    ],
-                                  )),
+                      child: BlocBuilder<BoardBloc, BoardState>(
+                        bloc: _boardBloc,
+                        builder: (context, state) {
+                          if (state is BoardInitial) {
+                            BlocProvider.of<BoardBloc>(context)
+                                .add(LoadBoard());
+                          } else if (state is BoardLoaded) {
+                            List<TaskType> boards = state.allBoards;
+                            return GridView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
                                 ),
-                              );
-                            } else {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => BoardTask(
-                                            boardTitle: taskType[index].title)),
-                                  );
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: taskType[index].color,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Center(
-                                      child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(12.0),
+                                shrinkWrap: true,
+                                itemCount: (boards.length + 1),
+                                itemBuilder: (context, index) {
+                                  if (index == (boards.length)) {
+                                    return GestureDetector(
+                                      onTap: _newBoardPopup,
+                                      child: Container(
                                         decoration: BoxDecoration(
-                                          color: taskType[index].colorBackIcon,
+                                          color: const Color(0xffFFEFEB),
                                           borderRadius:
-                                              BorderRadius.circular(12.0),
+                                              BorderRadius.circular(20.0),
                                         ),
-                                        height: 60,
-                                        width: 60,
-                                        child: SvgPicture.asset(
-                                            taskType[index].icon),
+                                        child: Center(
+                                            child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xffF0A58E),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                              height: 60,
+                                              width: 60,
+                                              child: const Icon(
+                                                  Icons.add_box_outlined),
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            const Text(
+                                              'Create Board',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff10275A),
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Roboto',
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                       ),
-                                      const SizedBox(height: 8.0),
-                                      Text(
-                                        taskType[index].title,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xff10275A),
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Roboto',
+                                    );
+                                  } else {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => BoardTask(
+                                                  boardTitle:
+                                                      boards[index].title)),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Color(int.parse(
+                                                  boards[index].color))
+                                              .withOpacity(
+                                                  boards[index].opacity),
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
                                         ),
-                                      ),
-                                      const SizedBox(height: 8.0),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: taskType[index]
-                                              .totalTask
-                                              .toString(),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Color(0xff393939),
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Roboto',
-                                          ),
-                                          children: const <TextSpan>[
-                                            TextSpan(
-                                                text: ' Task',
-                                                style: TextStyle(
+                                        child: Center(
+                                            child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              decoration: BoxDecoration(
+                                                color: Color(int.parse(
+                                                    boards[index]
+                                                        .colorBoxIcon)),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                              height: 60,
+                                              width: 60,
+                                              child: SvgPicture.asset(
+                                                  boards[index].icon),
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            Text(
+                                              boards[index].title,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff10275A),
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Roboto',
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: boards[index]
+                                                    .totalTask
+                                                    .toString(),
+                                                style: const TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xff393939),
                                                   fontWeight: FontWeight.w500,
                                                   fontFamily: 'Roboto',
-                                                )),
+                                                ),
+                                                children: const <TextSpan>[
+                                                  TextSpan(
+                                                      text: ' Task',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            Color(0xff393939),
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: 'Roboto',
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
                                           ],
-                                        ),
+                                        )),
                                       ),
-                                    ],
-                                  )),
-                                ),
-                              );
-                            }
-                          }),
+                                    );
+                                  }
+                                });
+                          }
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        },
+                      ),
                     ),
                   ],
                 );

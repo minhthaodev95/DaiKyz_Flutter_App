@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 18:03:52
+ ///  Modified time: 2021-11-26 13:36:05
  ///  Description:
  */
 
@@ -11,8 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
-class StackWidget extends StatelessWidget {
+class StackWidget extends StatefulWidget {
   const StackWidget({
+    required this.id,
     required this.title,
     required this.description,
     required this.tags,
@@ -21,9 +22,16 @@ class StackWidget extends StatelessWidget {
     required this.start,
     required this.end,
     required this.cTitleWidth,
+    required this.kWidth,
+    this.onDelete,
+    this.onDisable,
+    this.onEnable,
     Key? key,
   }) : super(key: key);
-
+  final VoidCallback? onDelete;
+  final VoidCallback? onDisable;
+  final VoidCallback? onEnable;
+  final String id;
   final String title;
   final String description;
   final DateTime start;
@@ -32,7 +40,13 @@ class StackWidget extends StatelessWidget {
   final String typeId;
   final String process;
   final double cTitleWidth;
+  final double kWidth;
 
+  @override
+  State<StackWidget> createState() => _StackWidgetState();
+}
+
+class _StackWidgetState extends State<StackWidget> {
   Color? _lineColor(process) {
     switch (process) {
       case 'pending':
@@ -57,19 +71,18 @@ class StackWidget extends StatelessWidget {
   void selectedItem(item) {
     switch (item) {
       case 0:
-        print('Enable');
+        widget.onEnable!();
         break;
       case 1:
-        print("Disable");
+        widget.onDisable!();
         break;
       case 2:
-        print("Edit");
         break;
       case 3:
-        print("Restore");
+        widget.onEnable!();
         break;
       case 4:
-        print("Delete");
+        widget.onDelete!();
         break;
     }
   }
@@ -81,7 +94,7 @@ class StackWidget extends StatelessWidget {
             color: const Color(0xffD6E1F8),
             borderRadius: BorderRadius.circular(15.0)),
         height: 114,
-        width: 220,
+        width: widget.kWidth,
         margin: const EdgeInsets.all(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +109,7 @@ class StackWidget extends StatelessWidget {
                     width: 2.5,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: _lineColor(process),
+                      color: _lineColor(widget.process),
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
@@ -106,20 +119,21 @@ class StackWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: cTitleWidth,
+                          width: widget.cTitleWidth,
                           child: GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => DetailTask(
-                                          title: title,
-                                          description: description,
-                                          tags: tags,
-                                          typeId: typeId,
-                                          process: process,
-                                          start: start,
-                                          end: end,
+                                          id: widget.id,
+                                          title: widget.title,
+                                          description: widget.description,
+                                          tags: widget.tags,
+                                          typeId: widget.typeId,
+                                          process: widget.process,
+                                          start: widget.start,
+                                          end: widget.end,
                                         )),
                               );
                             },
@@ -127,7 +141,7 @@ class StackWidget extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               strutStyle: const StrutStyle(fontSize: 12.0),
                               text: TextSpan(
-                                text: title,
+                                text: widget.title,
                                 style: const TextStyle(
                                     color: Color(0xff2C406E),
                                     fontWeight: FontWeight.w500,
@@ -143,7 +157,7 @@ class StackWidget extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              DateFormat.Hm().format(start),
+                              DateFormat.Hm().format(widget.start),
                               style: const TextStyle(
                                   color: Color(0xff9AA8C7),
                                   fontWeight: FontWeight.normal,
@@ -159,7 +173,7 @@ class StackWidget extends StatelessWidget {
                                   fontFamily: 'Roboto'),
                             ),
                             Text(
-                              DateFormat.Hm().format(end),
+                              DateFormat.Hm().format(widget.end),
                               style: const TextStyle(
                                   color: Color(0xff9AA8C7),
                                   fontWeight: FontWeight.normal,
@@ -192,7 +206,7 @@ class StackWidget extends StatelessWidget {
                         ),
                         color: Colors.white,
                         itemBuilder: (context) => [
-                          if (process == 'pending')
+                          if (widget.process == 'pending')
                             PopupMenuItem<int>(
                               value: 0,
                               child: Row(
@@ -205,7 +219,7 @@ class StackWidget extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          if (process == 'ongoing')
+                          if (widget.process == 'ongoing')
                             PopupMenuItem<int>(
                               value: 1,
                               child: Row(
@@ -218,7 +232,7 @@ class StackWidget extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          if (process != 'completed')
+                          if (widget.process != 'completed')
                             PopupMenuItem<int>(
                               value: 2,
                               child: Row(
@@ -231,7 +245,8 @@ class StackWidget extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          if (process == 'completed' || process == 'canceled')
+                          if (widget.process == 'completed' ||
+                              widget.process == 'canceled')
                             PopupMenuItem<int>(
                               value: 3,
                               child: Row(
@@ -282,7 +297,7 @@ class StackWidget extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 6.0),
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
-                      tags[index],
+                      widget.tags[index],
                       style: const TextStyle(
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w500,
@@ -292,7 +307,7 @@ class StackWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                itemCount: tags.length,
+                itemCount: widget.tags.length,
               ),
             )
           ],

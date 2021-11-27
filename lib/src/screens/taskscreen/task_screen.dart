@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-26 09:13:31
+ ///  Modified time: 2021-11-27 17:05:48
  ///  Description:
  */
 
@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 // ignore: must_be_immutable
 class TaskScreens extends StatefulWidget {
@@ -32,12 +31,6 @@ class _TaskScreensState extends State<TaskScreens> {
 
   DateTime selectedDate = DateTime.now();
   late TaskBloc _taskBloc;
-  @override
-  void initState() {
-    super.initState();
-    _taskBloc = TaskBloc();
-    _taskBloc.add(SelectedDayTask(daySelected: selectedDate));
-  }
 
   // void _selectDate() {
   //   showDialog(
@@ -114,6 +107,13 @@ class _TaskScreensState extends State<TaskScreens> {
     TaskRepository().enableTask(id);
     BlocProvider.of<TaskBloc>(context)
         .add(SelectedDayTask(daySelected: selectedDate));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _taskBloc = TaskBloc();
+    _taskBloc.add(SelectedDayTask(daySelected: DateTime.now()));
   }
 
   @override
@@ -208,9 +208,11 @@ class _TaskScreensState extends State<TaskScreens> {
                 ),
                 BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
                   // print('State ScreecTask : $state');
+                  if (state is TaskInitial) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
                   if (state is TaskDaySelectedLoaded) {
                     List<Task>? tasks = state.taskSelectedDay;
-                    // print(tasks[0].id);
                     if (tasks.isEmpty) {
                       return Center(
                         child: Padding(
@@ -273,5 +275,11 @@ class _TaskScreensState extends State<TaskScreens> {
       bottomNavigationBar: const BottomAppbar(currentIndex: 1),
       extendBody: true,
     );
+  }
+
+  @override
+  void dispose() {
+    _taskBloc.close();
+    super.dispose();
   }
 }

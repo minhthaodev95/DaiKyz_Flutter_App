@@ -2,11 +2,11 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-26 13:34:56
+ ///  Modified time: 2021-11-27 12:53:15
  ///  Description:
  */
 
-import 'package:Dailoz/src/data/dymmyData/task_data.dart';
+import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:Dailoz/src/screens/board_task_screen/add_task_board.dart';
 import 'package:Dailoz/src/screens/widgets/search_form.dart';
 import 'package:Dailoz/src/screens/widgets/task_widget.dart';
@@ -16,9 +16,11 @@ import 'package:intl/date_symbol_data_local.dart';
 // import 'package:flutter/material.dart';
 
 class BoardTask extends StatefulWidget {
-  const BoardTask({Key? key, required this.boardTitle}) : super(key: key);
+  const BoardTask({Key? key, required this.boardTitle, required this.id})
+      : super(key: key);
 
   final String boardTitle;
+  final String id;
   @override
   _BoardTaskState createState() => _BoardTaskState();
 }
@@ -308,6 +310,21 @@ class _BoardTaskState extends State<BoardTask> {
         });
   }
 
+  _onDeleteTask(BuildContext context, id) {
+    TaskRepository().deleteTask(id);
+    setState(() {});
+  }
+
+  _onDisableTask(BuildContext context, id) {
+    TaskRepository().disableTask(id);
+    setState(() {});
+  }
+
+  _onEnableTask(BuildContext context, id) {
+    TaskRepository().enableTask(id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -375,45 +392,6 @@ class _BoardTaskState extends State<BoardTask> {
                   ),
                 ],
               ),
-              // Stack(
-              //   children: [
-              //     Positioned(
-              //       child: GestureDetector(
-              //         onTap: () {
-              //           Navigator.pop(context);
-              //         },
-              //         child: Container(
-              //           height: 30,
-              //           width: 30,
-              //           decoration: BoxDecoration(
-              //             boxShadow: const [
-              //               BoxShadow(
-              //                 color: Colors.white,
-              //               ),
-              //             ],
-              //             borderRadius: BorderRadius.circular(14.0),
-              //           ),
-              //           child: Center(
-              //             child: SvgPicture.asset(
-              //               'assets/icons/back_arrow.svg',
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //     Center(
-              //       child: Text(
-              //         widget.boardTitle,
-              //         style: const TextStyle(
-              //           color: Color(0xff10275A),
-              //           fontSize: 20.0,
-              //           fontWeight: FontWeight.bold,
-              //           fontFamily: 'Roboto',
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
               const SizedBox(height: 25.0),
               Row(
                 children: [
@@ -435,24 +413,56 @@ class _BoardTaskState extends State<BoardTask> {
                 ],
               ),
               const SizedBox(height: 15.0),
-              ListView.builder(
-                padding: const EdgeInsets.only(top: 5),
-                // physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: tasks.length,
-                itemBuilder: (context, index) => StackWidget(
-                  id: '',
-                  title: tasks[index].title,
-                  description: tasks[index].description,
-                  tags: tasks[index].tags,
-                  typeId: tasks[index].typeId,
-                  process: tasks[index].process,
-                  start: tasks[index].dateStart,
-                  cTitleWidth: 200,
-                  kWidth: 220,
-                  end: tasks[index].dateEnd,
-                ),
-              ),
+              FutureBuilder(
+                  future: TaskRepository().getAllTasksByBoard(widget.id),
+                  builder: (BuildContext context, AsyncSnapshot snapshots) {
+                    // print(widget.id);
+                    if (!snapshots.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshots.data.isEmpty) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                          child: Text(
+                            'You don’t have any schedule.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xff575757),
+                              fontSize: 16.0,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto',
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        padding: const EdgeInsets.all(0),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshots.data!.length,
+                        itemBuilder: (context, idx) => StackWidget(
+                          id: snapshots.data![idx].id,
+                          title: snapshots.data![idx].title,
+                          description: snapshots.data![idx].description,
+                          tags: snapshots.data![idx].tags,
+                          typeId: snapshots.data![idx].typeId,
+                          process: snapshots.data![idx].process,
+                          start: snapshots.data![idx].dateStart,
+                          end: snapshots.data![idx].dateEnd,
+                          cTitleWidth: 225,
+                          kWidth: 220,
+                          onDelete: () =>
+                              _onDeleteTask(context, snapshots.data![idx].id),
+                          onDisable: () =>
+                              _onDisableTask(context, snapshots.data![idx].id),
+                          onEnable: () =>
+                              _onEnableTask(context, snapshots.data![idx].id),
+                        ),
+                      );
+                    }
+                  }),
             ],
           ),
         )),
@@ -473,8 +483,8 @@ class _BoardTaskState extends State<BoardTask> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    AddTaskBoardScreen(titleBoard: widget.boardTitle),
+                builder: (context) => AddTaskBoardScreen(
+                    titleBoard: widget.boardTitle, typeId: widget.id),
               ),
             );
           },

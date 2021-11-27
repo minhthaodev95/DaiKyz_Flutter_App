@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-25 17:37:38
+ ///  Modified time: 2021-11-27 14:57:32
  ///  Description:
  */
 
@@ -648,7 +648,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           MaterialPageRoute(
                                               builder: (context) => BoardTask(
                                                   boardTitle:
-                                                      boards[index].title)),
+                                                      boards[index].title,
+                                                  id: boards[index].id)),
                                         );
                                       },
                                       child: Container(

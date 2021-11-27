@@ -8,6 +8,7 @@ class TaskRepository {
   TaskRepository({FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
+  // Get all tasks by Datetime ...
   Future<List<Task>> getAllTasks(DateTime selectedTime) async {
     String _currentUserUid = _firebaseAuth.currentUser!.uid;
 
@@ -20,7 +21,6 @@ class TaskRepository {
         .get();
 
     // Check day of task
-
     if (response.size > 0) {
       List<Task> allTasks = response.docs
           .where((element) =>
@@ -36,6 +36,7 @@ class TaskRepository {
     return [];
   }
 
+  // get  tasks by process
   Future<List<Task>> getAllTasksByProcess(
       DateTime selectedTime, String process) async {
     String _currentUserUid = _firebaseAuth.currentUser!.uid;
@@ -66,9 +67,35 @@ class TaskRepository {
     return [];
   }
 
-  // Get number of task by process
+  Future<List<Task>> getAllTasksByBoard(String boardId) async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
 
-  Future<int> numberTask(String process) async {
+    QuerySnapshot<Map<String, dynamic>> response =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_currentUserUid)
+            .collection('tasks')
+            // .where('typeId', isEqualTo: 'a')
+            .orderBy('dateStart', descending: false)
+            .get();
+
+    // Check day of task
+
+    if (response.size > 0) {
+      List<Task> allTaskByBoard = response.docs
+          .where((element) => element['typeId'] == boardId)
+          .map((element) {
+        return Task.fromJson(element.data(), element.id);
+      }).toList();
+
+      return allTaskByBoard;
+    }
+
+    return [];
+  }
+
+  // Get number of task by process
+  Future<int> numberTaskByProcess(String process) async {
     String _currentUserUid = _firebaseAuth.currentUser!.uid;
 
     QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore

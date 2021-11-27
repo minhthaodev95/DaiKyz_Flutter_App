@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-25 19:07:43
+ ///  Modified time: 2021-11-27 14:54:10
  ///  Description:
  */
 
@@ -79,6 +79,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       dateInput = DateFormat('dd-MM-yyyy').format(selectedDate);
                     });
                   }
+                  Navigator.pop(context);
+                },
+                onCancel: () {
                   Navigator.pop(context);
                 },
                 initialSelectedRange: PickerDateRange(
@@ -368,6 +371,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   style: titleStyle,
                 ),
                 TextFormField(
+                  onTap: () => _selectDate(context),
                   readOnly: true,
                   decoration: InputDecoration(
                       hintText: dateInput,

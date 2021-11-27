@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-26 14:08:09
+ ///  Modified time: 2021-11-27 00:17:17
  ///  Description:
  */
 
@@ -28,10 +28,10 @@ class _CustomGridViewTaskState extends State<CustomGridViewTask> {
   int numCanceled = 0;
   int numPending = 0;
   void _getNumberTaskByProcess() async {
-    int _numCompleted = await TaskRepository().numberTask('completed');
-    int _numOngoing = await TaskRepository().numberTask('ongoing');
-    int _numCanceled = await TaskRepository().numberTask('canceled');
-    int _numPending = await TaskRepository().numberTask('pending');
+    int _numCompleted = await TaskRepository().numberTaskByProcess('completed');
+    int _numOngoing = await TaskRepository().numberTaskByProcess('ongoing');
+    int _numCanceled = await TaskRepository().numberTaskByProcess('canceled');
+    int _numPending = await TaskRepository().numberTaskByProcess('pending');
     setState(() {
       numCompleted = _numCompleted;
       numOngoing = _numOngoing;

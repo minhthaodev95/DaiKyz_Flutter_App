@@ -16,55 +16,59 @@ part 'sign_up_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   UserRepository userRepository;
 
-  RegisterBloc({required this.userRepository}) : super(RegisterState.empty());
-
-  @override
-  Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
-    if (event is EmailChanged) {
-      yield* _mapEmailChangedToState(event.email);
-    } else if (event is PasswordChanged) {
-      yield* _mapPasswordChangedToState(event.password);
-    } else if (event is LoginWithGooglePressed) {
-      yield* _mapLoginWithGooglePressedToState();
-    } else if (event is SignUpWithCredentialsPressed) {
-      yield* _mapSignUpWithCredentialsPressedToState(
-          userName: event.userName,
-          email: event.email,
-          password: event.password);
-    }
+  RegisterBloc({required this.userRepository}) : super(RegisterState.empty()) {
+    on<EmailChanged>(_mapEmailChangedToState);
+    on<PasswordChanged>(_mapPasswordChangedToState);
+    on<LoginWithGooglePressed>(_mapLoginWithGooglePressedToState);
+    on<SignUpWithCredentialsPressed>(_mapSignUpWithCredentialsPressedToState);
   }
 
-  Stream<RegisterState> _mapEmailChangedToState(String email) async* {
-    yield state.update(
-      isEmailValid: Validator.isValidEmail(email),
-    );
+  // @override
+  // Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
+  //   if (event is EmailChanged) {
+  //     yield* _mapEmailChangedToState(event.email);
+  //   } else if (event is PasswordChanged) {
+  //     yield* _mapPasswordChangedToState(event.password);
+  //   } else if (event is LoginWithGooglePressed) {
+  //     yield* _mapLoginWithGooglePressedToState();
+  //   } else if (event is SignUpWithCredentialsPressed) {
+  //     yield* _mapSignUpWithCredentialsPressedToState(
+  //         userName: event.userName,
+  //         email: event.email,
+  //         password: event.password);
+  //   }
+  // }
+
+  void _mapEmailChangedToState(
+      EmailChanged event, Emitter<RegisterState> emit) async {
+    emit(state.update(isEmailValid: Validator.isValidEmail(event.email)));
   }
 
-  Stream<RegisterState> _mapPasswordChangedToState(String password) async* {
-    yield state.update(
-      isPasswordValid: Validator.isValidPassword(password),
-    );
+  void _mapPasswordChangedToState(
+      PasswordChanged event, Emitter<RegisterState> emit) async {
+    emit(state.update(
+        isPasswordValid: Validator.isValidPassword(event.password)));
   }
 
-  Stream<RegisterState> _mapLoginWithGooglePressedToState() async* {
+  void _mapLoginWithGooglePressedToState(
+      LoginWithGooglePressed event, Emitter<RegisterState> emit) async {
     try {
       await userRepository.signInWithGoogle();
-      yield RegisterState.success();
+
+      emit(RegisterState.success());
     } catch (_) {
-      yield RegisterState.failure();
+      emit(RegisterState.failure());
     }
   }
 
-  Stream<RegisterState> _mapSignUpWithCredentialsPressedToState(
-      {required String userName,
-      required String email,
-      required String password}) async* {
-    yield RegisterState.loading();
+  void _mapSignUpWithCredentialsPressedToState(
+      SignUpWithCredentialsPressed event, Emitter<RegisterState> emit) async {
+    emit(RegisterState.loading());
     try {
-      await userRepository.signUp(userName, email, password);
-      yield RegisterState.success();
+      await userRepository.signUp(event.userName, event.email, event.password);
+      emit(RegisterState.success());
     } catch (_) {
-      yield RegisterState.failure();
+      emit(RegisterState.failure());
     }
   }
 }

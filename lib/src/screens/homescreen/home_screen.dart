@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-26 13:36:54
+ ///  Modified time: 2021-11-27 17:05:54
  ///  Description:
  */
 
@@ -11,6 +11,8 @@ import 'package:Dailoz/src/blocs/task_bloc/task_bloc.dart';
 import 'package:Dailoz/src/models/task_model.dart';
 import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:Dailoz/src/repository/user_repository.dart';
+import 'package:Dailoz/src/screens/authscreens/login_screen.dart';
+import 'package:Dailoz/src/screens/setting_screen/setting_scr.dart';
 import 'package:Dailoz/src/screens/taskscreen/task_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Dailoz/src/screens/homescreen/widget_homescreen/custom_gridview_task.dart';
@@ -29,13 +31,127 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final UserRepository _userRepository = UserRepository();
   late AuthenticationBloc _authenticationBloc;
-  final TaskBloc _taskBloc = TaskBloc();
+  late TaskBloc _taskBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.add(AppStarted());
+    _taskBloc = TaskBloc();
+    _taskBloc.add(SelectedDayTask(daySelected: DateTime.now()));
+  }
+
+  void selectedItem(item) {
+    switch (item) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SettingScreen()),
+        );
+        break;
+      case 1:
+        _logOutPopup();
+        break;
+    }
+  }
+
+  void _logOutPopup() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: Colors.white,
+                  ),
+                  height: 200,
+                  width: 300,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Text(
+                        'Log Out',
+                        style: TextStyle(
+                          color: Color(0xff10275A),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22.0,
+                          fontFamily: 'Roboto',
+                        ),
+                      ),
+                      const Text(
+                        'Are you sure to log out from this account ?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Color(0xff10275A),
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Roboto'),
+                      ),
+                      Container(
+                        alignment: AlignmentDirectional.center,
+                        constraints: const BoxConstraints(minHeight: 52.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: OverflowBar(
+                          spacing: 18,
+                          children: [
+                            SizedBox(
+                              width: 80.0,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors
+                                      .white, //change background color of button
+                                  onPrimary: const Color(
+                                      0xff5B67CA), //change text color of button
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: const BorderSide(
+                                          width: 1.0,
+                                          color: Color(0xff5B67CA))),
+                                  // elevation: 5.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 80.0,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(
+                                      0xff5B67CA), //change background color of button
+                                  onPrimary: const Color(
+                                      0xffffffff), //change text color of button
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: const BorderSide(
+                                          width: 1.0,
+                                          color: Color(0xff5B67CA))),
+                                  // elevation: 5.0,
+                                ),
+                                onPressed: () {
+                                  BlocProvider.of<AuthenticationBloc>(context)
+                                      .add(LoggedOut());
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginScreen()));
+                                },
+                                child: const Text('Sure'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )));
+        });
   }
 
   _onDeleteTask(BuildContext context, id) {
@@ -113,10 +229,65 @@ class _HomeScreenState extends State<HomeScreen> {
                               ))
                         ],
                       ),
-                      CircleAvatar(
-                        backgroundColor: Colors.brown.shade800,
-                        backgroundImage: NetworkImage(photoUrl),
-                      )
+                      PopupMenuButton<int>(
+                        elevation: 4,
+                        offset: const Offset(5, 35),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.brown.shade800,
+                          backgroundImage: NetworkImage(photoUrl),
+                        ),
+                        color: Colors.white,
+                        itemBuilder: (context) => [
+                          PopupMenuItem<int>(
+                            value: 0,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                    'assets/icons/setting_icon.svg'),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                const Text(
+                                  "Setting",
+                                  style: TextStyle(
+                                    color: Color(0xff10275A),
+                                    fontFamily: 'Roboto',
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem<int>(
+                            value: 1,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                    'assets/icons/log_out_icon.svg'),
+                                const SizedBox(
+                                  width: 7,
+                                ),
+                                const Text(
+                                  "Log Out",
+                                  style: TextStyle(
+                                    color: Color(0xff10275A),
+                                    fontFamily: 'Roboto',
+                                    fontSize: 16.0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                        onSelected: (item) => selectedItem(item),
+                      ),
+                      // CircleAvatar(
+                      //   backgroundColor: Colors.brown.shade800,
+                      //   backgroundImage: NetworkImage(photoUrl),
+                      // )
                     ],
                   );
                 },
@@ -167,8 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child:
                   BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
                 if (state is TaskInitial) {
-                  BlocProvider.of<TaskBloc>(context)
-                      .add(SelectedDayTask(daySelected: DateTime.now()));
+                  return const Center(child: CircularProgressIndicator());
                 }
                 if (state is TaskDaySelectedLoaded) {
                   List<Task>? tasks = state.taskSelectedDay;

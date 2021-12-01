@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-26 14:16:54
+ ///  Modified time: 2021-12-01 10:35:30
  ///  Description:
  */
 
@@ -396,6 +396,11 @@ class _ProcessTaskState extends State<ProcessTask> {
     setState(() {});
   }
 
+  _onRestoreTask(BuildContext context, id) {
+    TaskRepository().restoreTask(id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     int difference = _daysBetween(dayStart, dayEnd);
@@ -612,6 +617,9 @@ class _ProcessTaskState extends State<ProcessTask> {
                                               onEnable: () => _onEnableTask(
                                                   context,
                                                   snapshots.data![idx].id),
+                                              onRestore: () => _onRestoreTask(
+                                                  context,
+                                                  snapshots.data![idx].id),
                                             ),
                                           ),
                                         )
@@ -654,6 +662,9 @@ class _ProcessTaskState extends State<ProcessTask> {
                                                     context,
                                                     snapshots.data![idx].id),
                                                 onEnable: () => _onEnableTask(
+                                                    context,
+                                                    snapshots.data![idx].id),
+                                                onRestore: () => _onRestoreTask(
                                                     context,
                                                     snapshots.data![idx].id),
                                               ),

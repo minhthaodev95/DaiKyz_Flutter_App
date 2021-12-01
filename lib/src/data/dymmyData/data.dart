@@ -2,12 +2,11 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-25 11:56:46
+ ///  Modified time: 2021-12-01 10:37:13
  ///  Description:
  */
 
 import 'package:Dailoz/src/models/type_model.dart';
-import 'package:flutter/material.dart';
 
 List<TaskType> typeTask = [
   TaskType(

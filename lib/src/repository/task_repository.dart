@@ -152,7 +152,12 @@ class TaskRepository {
         .doc(_currentUserUid)
         .collection('tasks')
         .doc(id)
-        .update({"process": "ongoing"});
+        .update({
+      "process": "ongoing",
+      "dateStart": DateTime.now(),
+      "dateEnd": DateTime.now().add(const Duration(hours: 1)),
+      "dateTask": DateFormat('dd-MM-yyyy').format(DateTime.now()),
+    });
   }
 
   Future<void> completedTask(String id) {
@@ -175,5 +180,27 @@ class TaskRepository {
         .collection('tasks')
         .doc(id)
         .update({"process": "ongoing"});
+  }
+
+  // convert all task out of date to canceled........
+
+  Future<void> outOfDateToCanceled() async {
+    if (_firebaseAuth.currentUser != null) {
+      String _currentUserUid = _firebaseAuth.currentUser!.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUserUid)
+          .collection('tasks')
+          .where('dateEnd', isLessThan: DateTime.now())
+          .get()
+          .then((QuerySnapshot snapshot) {
+        for (var task in snapshot.docs) {
+          if (task['process'] != 'completed') {
+            task.reference.update({'process': 'canceled'});
+          }
+        }
+        return snapshot;
+      });
+    }
   }
 }

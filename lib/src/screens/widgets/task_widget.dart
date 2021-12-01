@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-26 13:36:05
+ ///  Modified time: 2021-12-01 10:51:17
  ///  Description:
  */
 
@@ -26,11 +26,13 @@ class StackWidget extends StatefulWidget {
     this.onDelete,
     this.onDisable,
     this.onEnable,
+    this.onRestore,
     Key? key,
   }) : super(key: key);
   final VoidCallback? onDelete;
   final VoidCallback? onDisable;
   final VoidCallback? onEnable;
+  final VoidCallback? onRestore;
   final String id;
   final String title;
   final String description;
@@ -79,7 +81,7 @@ class _StackWidgetState extends State<StackWidget> {
       case 2:
         break;
       case 3:
-        widget.onEnable!();
+        widget.onRestore!();
         break;
       case 4:
         widget.onDelete!();
@@ -134,6 +136,10 @@ class _StackWidgetState extends State<StackWidget> {
                                           process: widget.process,
                                           start: widget.start,
                                           end: widget.end,
+                                          onEnable: widget.onEnable,
+                                          onDisable: widget.onDisable,
+                                          onRestore: widget.onRestore,
+                                          onDelete: widget.onDelete,
                                         )),
                               );
                             },

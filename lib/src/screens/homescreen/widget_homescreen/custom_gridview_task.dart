@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-27 00:17:17
+ ///  Modified time: 2021-12-01 11:21:21
  ///  Description:
  */
 
@@ -32,12 +32,17 @@ class _CustomGridViewTaskState extends State<CustomGridViewTask> {
     int _numOngoing = await TaskRepository().numberTaskByProcess('ongoing');
     int _numCanceled = await TaskRepository().numberTaskByProcess('canceled');
     int _numPending = await TaskRepository().numberTaskByProcess('pending');
-    setState(() {
-      numCompleted = _numCompleted;
-      numOngoing = _numOngoing;
-      numCanceled = _numCanceled;
-      numPending = _numPending;
-    });
+    if (numCanceled != _numCanceled ||
+        numPending != _numPending ||
+        _numOngoing != numOngoing ||
+        numCompleted != _numCompleted) {
+      setState(() {
+        numCompleted = _numCompleted;
+        numOngoing = _numOngoing;
+        numCanceled = _numCanceled;
+        numPending = _numPending;
+      });
+    }
   }
 
   @override
@@ -68,5 +73,10 @@ class _CustomGridViewTaskState extends State<CustomGridViewTask> {
         StaggeredTile.count(2, 1.7),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

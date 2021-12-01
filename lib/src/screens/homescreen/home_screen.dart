@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-27 17:21:48
+ ///  Modified time: 2021-12-01 11:10:43
  ///  Description:
  */
 
@@ -33,9 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
   late AuthenticationBloc _authenticationBloc;
   late TaskBloc _taskBloc;
 
+  void _checkTask() async {
+    await TaskRepository().outOfDateToCanceled();
+  }
+
   @override
   void initState() {
     super.initState();
+    _checkTask();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.add(AppStarted());
     _taskBloc = TaskBloc();
@@ -47,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SettingScreen()),
+          MaterialPageRoute(builder: (context) => const SettingScreen()),
         );
         break;
       case 1:
@@ -172,15 +177,18 @@ class _HomeScreenState extends State<HomeScreen> {
         .add(SelectedDayTask(daySelected: DateTime.now()));
   }
 
+  _onRestoreTask(BuildContext context, id) {
+    TaskRepository().restoreTask(id);
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: DateTime.now()));
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final _authenticationBloc = context.select(
-    //     (AuthenticationBloc _authenticationBloc) => _authenticationBloc);
-
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(
-            top: 20.0, bottom: 10.0, left: 10.0, right: 10.0),
+            top: 20.0, bottom: 100.0, left: 10.0, right: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -387,6 +395,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         onDisable: () =>
                             _onDisableTask(context, tasks[index].id),
                         onEnable: () => _onEnableTask(context, tasks[index].id),
+                        onRestore: () =>
+                            _onRestoreTask(context, tasks[index].id),
                       ),
                     );
                   }

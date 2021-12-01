@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-27 17:22:03
+ ///  Modified time: 2021-12-01 11:11:36
  ///  Description:
  */
 
@@ -107,6 +107,11 @@ class _TaskScreensState extends State<TaskScreens> {
     TaskRepository().enableTask(id);
     BlocProvider.of<TaskBloc>(context)
         .add(SelectedDayTask(daySelected: selectedDate));
+  }
+
+  _onRestoreTask(BuildContext context, id) {
+    TaskRepository().restoreTask(id);
+    setState(() {});
   }
 
   @override
@@ -261,6 +266,8 @@ class _TaskScreensState extends State<TaskScreens> {
                               _onDisableTask(context, tasks[index].id),
                           onEnable: () =>
                               _onEnableTask(context, tasks[index].id),
+                          onRestore: () =>
+                              _onRestoreTask(context, tasks[index].id),
                         ),
                       );
                     }

@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-26 10:52:51
+ ///  Modified time: 2021-12-01 10:40:17
  ///  Description:
  */
 
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CanceledWidget extends StatelessWidget {
-  CanceledWidget({
+  const CanceledWidget({
     Key? key,
     required this.num,
   }) : super(key: key);

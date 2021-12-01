@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-25 11:13:45
+ ///  Modified time: 2021-12-01 10:54:18
  ///  Description:
  */
 
@@ -23,8 +23,16 @@ class DetailTask extends StatefulWidget {
       required this.process,
       required this.start,
       required this.end,
+      this.onDelete,
+      this.onDisable,
+      this.onEnable,
+      this.onRestore,
       Key? key})
       : super(key: key);
+  final VoidCallback? onDelete;
+  final VoidCallback? onDisable;
+  final VoidCallback? onEnable;
+  final VoidCallback? onRestore;
   final String id;
   final String title;
   final String description;
@@ -51,19 +59,22 @@ class _DetailTaskState extends State<DetailTask> {
   void selectedItem(item) {
     switch (item) {
       case 0:
-        print('Enable');
+        widget.onEnable!();
+        setState(() {});
         break;
       case 1:
-        print("Disable");
+        widget.onDisable!();
+        setState(() {});
         break;
       case 2:
-        print("Edit");
         break;
       case 3:
-        print("Restore");
+        widget.onRestore!();
+        setState(() {});
         break;
       case 4:
-        print("Delete");
+        widget.onDelete!();
+        Navigator.pop(context);
         break;
     }
   }

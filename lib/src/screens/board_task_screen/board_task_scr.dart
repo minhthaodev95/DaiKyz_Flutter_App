@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-27 12:53:15
+ ///  Modified time: 2021-12-01 11:13:05
  ///  Description:
  */
 
@@ -325,6 +325,11 @@ class _BoardTaskState extends State<BoardTask> {
     setState(() {});
   }
 
+  _onRestoreTask(BuildContext context, id) {
+    TaskRepository().restoreTask(id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -459,6 +464,8 @@ class _BoardTaskState extends State<BoardTask> {
                               _onDisableTask(context, snapshots.data![idx].id),
                           onEnable: () =>
                               _onEnableTask(context, snapshots.data![idx].id),
+                          onRestore: () =>
+                              _onRestoreTask(context, snapshots.data![idx].id),
                         ),
                       );
                     }

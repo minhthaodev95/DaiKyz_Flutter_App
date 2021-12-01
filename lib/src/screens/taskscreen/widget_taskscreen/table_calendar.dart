@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-25 09:55:08
+ ///  Modified time: 2021-12-01 10:40:21
  ///  Description:
  */
 
@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+// ignore: must_be_immutable
 class TableCalendarWeek extends StatefulWidget {
   TableCalendarWeek({Key? key, required this.selectedDay, required this.date})
       : super(key: key);
@@ -23,12 +24,9 @@ class TableCalendarWeek extends StatefulWidget {
 }
 
 class _TableCalendarWeekState extends State<TableCalendarWeek> {
-  late TaskBloc _taskBloc;
-
   @override
   void initState() {
     super.initState();
-    _taskBloc = TaskBloc();
   }
 
   @override

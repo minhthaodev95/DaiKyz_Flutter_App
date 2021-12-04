@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 10:40:19
+ ///  Modified time: 2021-12-04 10:39:03
  ///  Description:
  */
 
@@ -10,6 +10,7 @@ import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:Dailoz/src/blocs/board_bloc/board_bloc.dart';
 import 'package:Dailoz/src/data/dymmyData/data.dart';
 import 'package:Dailoz/src/models/type_model.dart';
+import 'package:Dailoz/src/repository/get_boards.dart';
 import 'package:Dailoz/src/repository/user_repository.dart';
 import 'package:Dailoz/src/screens/authscreens/login_screen.dart';
 import 'package:Dailoz/src/screens/board_task_screen/board_task_scr.dart';
@@ -39,8 +40,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final UserRepository _userRepository = UserRepository();
   late AuthenticationBloc _authenticationBloc;
   late BoardBloc _boardBloc;
+
+  void updateTotalTask() async {
+    await Boards().updateTotalTasks();
+  }
+
   @override
   void initState() {
+    // updateTotalTask();
     super.initState();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.add(AppStarted());
@@ -440,6 +447,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // updateTotalTask();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0),
@@ -601,7 +610,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 itemBuilder: (context, index) {
                                   if (index == (boards.length)) {
                                     return GestureDetector(
-                                      onTap: _newBoardPopup,
+                                      onTap: widget.email ==
+                                              'minhthao.dev95@gmail.com'
+                                          ? _newBoardPopup
+                                          : () {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: const [
+                                                      Text(
+                                                          'Tính năng này hiện chưa khả dụng  !!'),
+                                                    ],
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.blue[600],
+                                                ),
+                                              );
+                                            },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: const Color(0xffFFEFEB),
@@ -642,6 +671,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     );
                                   } else {
                                     return GestureDetector(
+                                      // Board
                                       onTap: () {
                                         Navigator.push(
                                           context,

@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-18 14:58:53
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-25 12:56:05
+ ///  Modified time: 2021-12-03 09:01:36
  ///  Description:
  */
 
@@ -90,5 +90,31 @@ class UserRepository {
 
   Future<User?> getUser() async {
     return _firebaseAuth.currentUser!;
+  }
+
+  Future<void> deleteUserandData() async {
+    final String uid = _firebaseAuth.currentUser!.uid;
+    await FirebaseFirestore.instance.collection('users').doc(uid).delete().then(
+          (value) => (print('Delete Field completed !')),
+        );
+    var snapshotsBoard = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('boards')
+        .get();
+    for (var doc in snapshotsBoard.docs) {
+      await doc.reference.delete();
+    }
+    var snapshotsTasks = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('tasks')
+        .get();
+    for (var doc in snapshotsTasks.docs) {
+      await doc.reference.delete();
+    }
+    await _firebaseAuth.currentUser!
+        .delete()
+        .whenComplete(() => print('User Deleted !'));
   }
 }

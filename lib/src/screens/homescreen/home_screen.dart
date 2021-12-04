@@ -2,10 +2,11 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 11:10:43
+ ///  Modified time: 2021-12-03 10:50:48
  ///  Description:
  */
 
+import 'package:Dailoz/generated/l10n.dart';
 import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:Dailoz/src/blocs/task_bloc/task_bloc.dart';
 import 'package:Dailoz/src/models/task_model.dart';
@@ -221,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hi $userName',
+                            '${S.of(context).Hi} $userName',
                             style: const TextStyle(
                               fontFamily: 'Roboto',
                               fontWeight: FontWeight.bold,

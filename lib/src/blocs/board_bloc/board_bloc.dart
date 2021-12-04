@@ -12,6 +12,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
   }
 
   void _initBoards(BoardEvent event, Emitter<BoardState> emit) async {
+    await Boards().updateTotalTasks();
     List<TaskType> allBoards = await Boards().getAllBoards();
     emit(BoardLoaded(allBoards: allBoards));
   }

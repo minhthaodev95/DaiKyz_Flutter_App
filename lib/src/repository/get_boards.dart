@@ -23,4 +23,26 @@ class Boards {
 
     return allBoards;
   }
+
+  Future<void> updateTotalTasks() async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+    QuerySnapshot<Map<String, dynamic>> allBoards = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('boards')
+        .get();
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> element
+        in allBoards.docs) {
+      QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(_currentUserUid)
+          .collection('tasks')
+          .where('typeId', isEqualTo: element['id'])
+          .get();
+      element.reference.update({'totalTask': response.docs.length});
+    }
+  }
 }

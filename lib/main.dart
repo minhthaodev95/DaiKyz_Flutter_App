@@ -2,11 +2,13 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 10:37:10
+ ///  Modified time: 2021-12-04 10:36:53
  ///  Description:
  */
 
+import 'package:Dailoz/generated/l10n.dart';
 import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
+import 'package:Dailoz/src/blocs/localizaton_bloc/localization_bloc.dart';
 import 'package:Dailoz/src/repository/user_repository.dart';
 import 'package:Dailoz/src/screens/add_task_screen/add_task_screen.dart';
 import 'package:Dailoz/src/screens/authscreens/login_screen.dart';
@@ -19,6 +21,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,18 +45,37 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final UserRepository _userRepository = UserRepository();
   late AuthenticationBloc _authenticationBloc;
+  late LocalizationBloc _localizationBloc;
+  String language = 'English';
+
+  void _getLanguages() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      language = (prefs.getString('language') ?? 'English');
+    });
+  }
 
   @override
   void initState() {
-    super.initState();
+    _getLanguages();
+
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.add(AppStarted());
+    _localizationBloc = LocalizationBloc();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _authenticationBloc,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => _authenticationBloc,
+        ),
+        BlocProvider(
+          create: (context) => _localizationBloc,
+        ),
+      ],
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           late String userName;
@@ -76,32 +99,51 @@ class _MyAppState extends State<MyApp> {
             photoUrl =
                 "https://yorktonrentals.com/wp-content/uploads/2017/06/usericon.png";
           }
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            routes: {
-              // '/': (context) => const OnboardingScreen(),
-              '/home': (context) => const HomeScreen(),
-              '/taskScreen': (context) => const TaskScreens(),
-              '/addtask': (context) => const AddTaskScreen(),
-              '/analyticScreen': (context) => const AnalyticScreen(),
-              '/folderScreen': (context) => ProfileScreen(
-                  username: userName, photoUrl: photoUrl, email: userEmail),
+          return BlocBuilder<LocalizationBloc, LocalizationState>(
+            builder: (context, localeState) {
+              if (language == 'Vietnamese') {
+                BlocProvider.of<LocalizationBloc>(context)
+                    .add(ChangeToVietnamese());
+              }
+              return MaterialApp(
+                localizationsDelegates: const [
+                  // AppLocalizations.delegate,
+                  S.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                locale: (localeState is EnglishState)
+                    ? const Locale('en')
+                    : const Locale('vi'),
+                supportedLocales: S.delegate.supportedLocales,
+                debugShowCheckedModeBanner: false,
+                routes: {
+                  // '/': (context) => const OnboardingScreen(),
+                  '/home': (context) => const HomeScreen(),
+                  '/taskScreen': (context) => const TaskScreens(),
+                  '/addtask': (context) => const AddTaskScreen(),
+                  '/analyticScreen': (context) => const AnalyticScreen(),
+                  '/folderScreen': (context) => ProfileScreen(
+                      username: userName, photoUrl: photoUrl, email: userEmail),
+                },
+                theme: ThemeData(
+                  // Define the default brightness and colors.
+                  primaryColor: Colors.green,
+                  brightness: Brightness.light,
+                  fontFamily: 'Roboto',
+                ),
+                home: state is Uninitialized
+                    ? const OnboardingScreen()
+                    : state is Unauthenticated
+                        ? LoginScreen()
+                        : state is Authenticated
+                            ? const HomeScreen()
+                            : const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+              );
             },
-            theme: ThemeData(
-              // Define the default brightness and colors.
-              primaryColor: Colors.green,
-              brightness: Brightness.light,
-              fontFamily: 'Roboto',
-            ),
-            home: state is Uninitialized
-                ? const OnboardingScreen()
-                : state is Unauthenticated
-                    ? LoginScreen()
-                    : state is Authenticated
-                        ? const HomeScreen()
-                        : const Center(
-                            child: CircularProgressIndicator(),
-                          ),
           );
         },
       ),

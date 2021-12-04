@@ -2,13 +2,18 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 03:26:25
+ ///  Modified time: 2021-12-03 13:33:48
  ///  Description:
  */
 
+import 'package:Dailoz/src/blocs/localizaton_bloc/localization_bloc.dart';
+import 'package:Dailoz/src/repository/user_repository.dart';
+import 'package:Dailoz/src/screens/authscreens/onboarding_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -21,6 +26,35 @@ class _SettingScreenState extends State<SettingScreen> {
   String language = 'English';
   bool _value = false;
   bool _valueR = false;
+
+  void setDefaultValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('language')) {
+      return;
+    } else {
+      prefs.setString('language', language);
+      prefs.setBool('notifacation', _value);
+      prefs.setBool('notifacationRing', _valueR);
+    }
+  }
+
+  void getValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      language = (prefs.getString('language') ?? 'English');
+      _value = (prefs.getBool('notifacation') ?? false);
+      _valueR = (prefs.getBool('notifacationRing') ?? false);
+    });
+  }
+
+  void changeLanguague(String languageInput) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      language = languageInput;
+      print('Lan: $language');
+    });
+    prefs.setString('language', languageInput);
+  }
 
   void _deletePopup() {
     showDialog(
@@ -101,7 +135,17 @@ class _SettingScreenState extends State<SettingScreen> {
                                           color: Color(0xff5B67CA))),
                                   // elevation: 5.0,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  // code delete account and all data.
+                                  UserRepository()
+                                      .deleteUserandData()
+                                      .whenComplete(() => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const OnboardingScreen(),
+                                          )));
+                                },
                                 child: const Text('Sure'),
                               ),
                             ),
@@ -146,6 +190,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       Wrap(runSpacing: 10.0, children: [
                         GestureDetector(
                           onTap: () {
+                            BlocProvider.of<LocalizationBloc>(context)
+                                .add(ChangeToEnglish());
+                            changeLanguague('English');
                             setState(() {
                               language = 'English';
                             });
@@ -175,6 +222,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            BlocProvider.of<LocalizationBloc>(context)
+                                .add(ChangeToVietnamese());
+                            changeLanguague('Vietnamese');
                             setState(() {
                               language = 'Vietnamese';
                             });
@@ -210,6 +260,13 @@ class _SettingScreenState extends State<SettingScreen> {
             },
           );
         });
+  }
+
+  @override
+  void initState() {
+    // setDefaultValue();
+    getValue();
+    super.initState();
   }
 
   @override
@@ -278,45 +335,6 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                 ],
               ),
-              // Stack(
-              //   children: [
-              //     Positioned(
-              //       child: GestureDetector(
-              //         onTap: () {
-              //           Navigator.pop(context);
-              //         },
-              //         child: Container(
-              //           height: 30,
-              //           width: 30,
-              //           decoration: BoxDecoration(
-              //             boxShadow: const [
-              //               BoxShadow(
-              //                 color: Colors.white,
-              //               ),
-              //             ],
-              //             borderRadius: BorderRadius.circular(14.0),
-              //           ),
-              //           child: Center(
-              //             child: SvgPicture.asset(
-              //               'assets/icons/back_arrow.svg',
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //     const Center(
-              //       child: Text(
-              //         'Setting',
-              //         style: TextStyle(
-              //           color: Color(0xff10275A),
-              //           fontSize: 20.0,
-              //           fontWeight: FontWeight.bold,
-              //           fontFamily: 'Roboto',
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
               const Text(
                 'General',
                 style: TextStyle(
@@ -344,9 +362,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       direction: Axis.horizontal,
                       children: [
-                        const Text(
-                          'English',
-                          style: TextStyle(
+                        Text(
+                          (language == 'English') ? 'English' : 'Tiếng Việt',
+                          style: const TextStyle(
                               color: Color(0xff10275A),
                               fontSize: 16.0,
                               fontWeight: FontWeight.normal,

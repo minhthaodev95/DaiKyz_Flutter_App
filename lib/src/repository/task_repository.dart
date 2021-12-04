@@ -38,7 +38,9 @@ class TaskRepository {
 
   // get  tasks by process
   Future<List<Task>> getAllTasksByProcess(
-      DateTime selectedTime, String process) async {
+      {required DateTime selectedTime,
+      required String process,
+      String? searchText}) async {
     String _currentUserUid = _firebaseAuth.currentUser!.uid;
 
     QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
@@ -53,15 +55,26 @@ class TaskRepository {
     // Check day of task
 
     if (response.size > 0) {
-      List<Task> allTasks = response.docs
-          .where((element) =>
-              element['dateTask'] ==
-              DateFormat('dd-MM-yyyy').format(selectedTime))
-          .map((element) {
-        return Task.fromJson(element.data(), element.id);
-      }).toList();
-
-      return allTasks;
+      if (searchText != null) {
+        List<Task> allTasks = response.docs
+            .where((element) =>
+                element['dateTask'] ==
+                    DateFormat('dd-MM-yyyy').format(selectedTime) &&
+                element['title'].contains(searchText))
+            .map((element) {
+          return Task.fromJson(element.data(), element.id);
+        }).toList();
+        return allTasks;
+      } else {
+        List<Task> allTasks = response.docs
+            .where((element) =>
+                element['dateTask'] ==
+                DateFormat('dd-MM-yyyy').format(selectedTime))
+            .map((element) {
+          return Task.fromJson(element.data(), element.id);
+        }).toList();
+        return allTasks;
+      }
     }
 
     return [];
@@ -104,6 +117,21 @@ class TaskRepository {
         .doc(_currentUserUid)
         .collection('tasks')
         .where('process', isEqualTo: process)
+        .get();
+    int totalTask = response.docs.length;
+    return totalTask;
+  }
+
+  // Get number of task by board
+  Future<int> numberTaskByBoard(String typeId) async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .where('typeId', isEqualTo: typeId)
         .get();
     int totalTask = response.docs.length;
     return totalTask;
@@ -154,9 +182,6 @@ class TaskRepository {
         .doc(id)
         .update({
       "process": "ongoing",
-      "dateStart": DateTime.now(),
-      "dateEnd": DateTime.now().add(const Duration(hours: 1)),
-      "dateTask": DateFormat('dd-MM-yyyy').format(DateTime.now()),
     });
   }
 
@@ -180,6 +205,34 @@ class TaskRepository {
         .collection('tasks')
         .doc(id)
         .update({"process": "ongoing"});
+  }
+
+  //update task
+  Future<void> updateTask(
+      {required String id,
+      required String title,
+      required String description,
+      required List tags,
+      required String typeId,
+      required String dateTask,
+      required DateTime start,
+      required DateTime end}) {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .doc(id)
+        .update({
+      'title': title,
+      'description': description,
+      'dateStart': start,
+      'dateEnd': end,
+      'dateTask': dateTask,
+      'tags': tags,
+      'typeId': typeId
+    });
   }
 
   // convert all task out of date to canceled........

@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 11:13:05
+ ///  Modified time: 2021-12-02 07:11:02
  ///  Description:
  */
 
@@ -26,6 +26,8 @@ class BoardTask extends StatefulWidget {
 }
 
 class _BoardTaskState extends State<BoardTask> {
+  late String textSearch;
+
   @override
   void initState() {
     super.initState();
@@ -400,7 +402,11 @@ class _BoardTaskState extends State<BoardTask> {
               const SizedBox(height: 25.0),
               Row(
                 children: [
-                  Expanded(child: SearchForm()),
+                  Expanded(child: SearchForm(
+                    search: (searchText) {
+                      textSearch = searchText;
+                    },
+                  )),
                   const SizedBox(width: 5.0),
                   GestureDetector(
                     onTap: _selectFilter,

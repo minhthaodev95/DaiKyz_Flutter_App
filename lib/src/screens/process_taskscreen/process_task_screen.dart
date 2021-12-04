@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 10:35:30
+ ///  Modified time: 2021-12-02 07:34:53
  ///  Description:
  */
 
@@ -30,6 +30,7 @@ class _ProcessTaskState extends State<ProcessTask> {
   DateTime dayStart = DateTime.now();
   DateTime dayEnd = DateTime.now().add(const Duration(days: 3));
   late TaskBloc _taskBloc;
+  String textSearch = '';
   int _daysBetween(DateTime from, DateTime to) {
     from = DateTime(from.year, from.month, from.day);
     to = DateTime(to.year, to.month, to.day);
@@ -478,7 +479,11 @@ class _ProcessTaskState extends State<ProcessTask> {
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
                   children: [
-                    Expanded(child: SearchForm()),
+                    Expanded(child: SearchForm(
+                      search: (searchText) {
+                        textSearch = searchText;
+                      },
+                    )),
                     const SizedBox(width: 5.0),
                     GestureDetector(
                       onTap: _selectFilter,
@@ -549,8 +554,9 @@ class _ProcessTaskState extends State<ProcessTask> {
                           const SizedBox(height: 10.0),
                           FutureBuilder(
                               future: TaskRepository().getAllTasksByProcess(
-                                  _eachDay(idx, dayStart),
-                                  widget.processTitle.toLowerCase()),
+                                  selectedTime: _eachDay(idx, dayStart),
+                                  process: widget.processTitle.toLowerCase(),
+                                  searchText: textSearch),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshots) {
                                 if (!snapshots.hasData) {

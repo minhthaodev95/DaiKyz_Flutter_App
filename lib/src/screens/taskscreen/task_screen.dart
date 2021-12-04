@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 11:11:36
+ ///  Modified time: 2021-12-04 09:46:17
  ///  Description:
  */
 
@@ -28,6 +28,7 @@ class TaskScreens extends StatefulWidget {
 
 class _TaskScreensState extends State<TaskScreens> {
   var dateString = DateFormat.jm().format(DateTime.now());
+  late String textSearch;
 
   DateTime selectedDate = DateTime.now();
   late TaskBloc _taskBloc;
@@ -111,7 +112,8 @@ class _TaskScreensState extends State<TaskScreens> {
 
   _onRestoreTask(BuildContext context, id) {
     TaskRepository().restoreTask(id);
-    setState(() {});
+    BlocProvider.of<TaskBloc>(context)
+        .add(SelectedDayTask(daySelected: selectedDate));
   }
 
   @override
@@ -130,11 +132,15 @@ class _TaskScreensState extends State<TaskScreens> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(
-                top: 20.0, bottom: 10.0, left: 10.0, right: 10.0),
+                top: 20.0, bottom: 100.0, left: 10.0, right: 10.0),
             child: Column(
               children: [
                 const SizedBox(height: 35.0),
-                SearchForm(),
+                SearchForm(
+                  search: (searchText) {
+                    textSearch = searchText;
+                  },
+                ),
                 const SizedBox(height: 30.0),
                 IntrinsicWidth(
                   child: SizedBox(

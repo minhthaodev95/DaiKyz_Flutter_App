@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-04 10:50:49
+ ///  Modified time: 2021-12-06 15:43:10
  ///  Description:
  */
 
@@ -53,10 +53,18 @@ class StackWidget extends StatefulWidget {
 class _StackWidgetState extends State<StackWidget> {
   final FlutterTts flutterTts = FlutterTts();
 
-  Future<void> _speak(text) async {
-    await flutterTts.setLanguage('en-US');
-    await flutterTts.setPitch(1);
+  Future<void> _speak(text, timeStart, timeEnd) async {
+    await flutterTts.setVoice({'name': 'en-au-x-auc-local', 'locale': 'en-AU'});
+    //?!@ if build for ios delete setQueueMode ...
+    await flutterTts.setQueueMode(1);
+    // await flutterTts.setLanguage('en-US');
+    await flutterTts.setPitch(1.1);
+    // await flutterTts.speak('Your Task is');
     await flutterTts.speak(text);
+    await flutterTts.speak('Start at');
+    await flutterTts.speak(DateFormat.jm().format(timeStart));
+    await flutterTts.speak('to');
+    await flutterTts.speak(DateFormat.jm().format(timeEnd));
   }
 
   Color? _lineColor(process) {
@@ -115,7 +123,7 @@ class _StackWidgetState extends State<StackWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () => _speak(widget.title),
+      onLongPress: () => _speak(widget.title, widget.start, widget.end),
       child: Container(
           decoration: BoxDecoration(
               color: const Color(0xffD6E1F8),

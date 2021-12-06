@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-02 07:11:02
+ ///  Modified time: 2021-12-06 15:37:09
  ///  Description:
  */
 
@@ -450,7 +450,7 @@ class _BoardTaskState extends State<BoardTask> {
                     } else {
                       return ListView.builder(
                         padding: const EdgeInsets.all(0),
-                        physics: const AlwaysScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: snapshots.data!.length,
                         itemBuilder: (context, idx) => StackWidget(

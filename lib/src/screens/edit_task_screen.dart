@@ -2,11 +2,11 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-03 18:59:21
+ ///  Modified time: 2021-12-06 15:33:37
  ///  Description:
  */
 
-import 'package:Dailoz/src/data/dymmyData/data.dart';
+import 'package:Dailoz/src/data/data.dart';
 import 'package:Dailoz/src/models/task_model.dart';
 import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:Dailoz/src/screens/homescreen/home_screen.dart';
@@ -93,6 +93,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     setState(() {
                       selectedDate = value;
                       dateInput = DateFormat('dd-MM-yyyy').format(selectedDate);
+                      dateStart = DateTime(
+                          selectedDate.year,
+                          selectedDate.month,
+                          selectedDate.day,
+                          _time.hour,
+                          _time.minute);
+                      dateEnd = DateTime(selectedDate.year, selectedDate.month,
+                          selectedDate.day, _timeEnd.hour, _timeEnd.minute);
                     });
                   }
                   Navigator.pop(context);
@@ -292,9 +300,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     _time = TimeOfDay.fromDateTime(widget.start);
     _timeEnd = TimeOfDay.fromDateTime(widget.end);
     index = int.parse(widget.typeId);
-    dateStart = DateTime(widget.start.year, widget.start.month,
-        widget.start.day, _time.hour, _time.minute);
-    dateEnd = DateTime(widget.start.year, widget.start.month, widget.start.day,
+    dateStart = DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, _time.hour, _time.minute);
+    dateEnd = DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
         _timeEnd.hour, _timeEnd.minute);
     _controller.text = widget.title;
     _desController.text = widget.description;
@@ -304,8 +312,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // selectedDate = widget.start;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -605,17 +611,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      //   Task newTask = Task(
-                      //     id: '',
-                      //     title: _controller.text,
-                      //     dateTask: DateFormat('dd-MM-yyyy').format(selectedDate),
-                      //     dateStart: dateStart,
-                      //     dateEnd: dateEnd,
-                      //     description: _desController.text,
-                      //     typeId: index.toString(),
-                      //     tags: tags,
-                      //     process: 'ongoing',
-                      //   );
                       await TaskRepository()
                           .updateTask(
                             id: widget.id,

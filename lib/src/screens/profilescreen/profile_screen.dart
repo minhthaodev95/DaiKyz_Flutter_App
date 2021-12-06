@@ -2,13 +2,13 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-04 10:39:03
+ ///  Modified time: 2021-12-06 15:33:07
  ///  Description:
  */
 
 import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:Dailoz/src/blocs/board_bloc/board_bloc.dart';
-import 'package:Dailoz/src/data/dymmyData/data.dart';
+import 'package:Dailoz/src/data/data.dart';
 import 'package:Dailoz/src/models/type_model.dart';
 import 'package:Dailoz/src/repository/get_boards.dart';
 import 'package:Dailoz/src/repository/user_repository.dart';
@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    // updateTotalTask();
+    updateTotalTask();
     super.initState();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.add(AppStarted());

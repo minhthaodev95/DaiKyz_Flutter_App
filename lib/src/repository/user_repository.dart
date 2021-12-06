@@ -2,11 +2,11 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-18 14:58:53
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-03 09:01:36
+ ///  Modified time: 2021-12-06 15:32:41
  ///  Description:
  */
 
-import 'package:Dailoz/src/data/dymmyData/data.dart';
+import 'package:Dailoz/src/data/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';

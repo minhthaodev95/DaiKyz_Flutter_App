@@ -235,6 +235,38 @@ class TaskRepository {
     });
   }
 
+  // get number task and caculator for graphic.
+  Future<List> getNumberTaskOfDayByType(DateTime date) async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+    QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .get();
+
+    // Check day of task
+    if (response.size > 0) {
+      List<Task> allTaskDate = response.docs
+          .where((element) =>
+              element['dateTask'] == DateFormat('dd-MM-yyyy').format(date))
+          .map((element) {
+        return Task.fromJson(element.data(), element.id);
+      }).toList();
+
+      if (allTaskDate.isNotEmpty) {
+        int personalTask =
+            allTaskDate.where((element) => element.typeId == '1').length;
+        int privateTask =
+            allTaskDate.where((element) => element.typeId == '3').length;
+        int workTask =
+            allTaskDate.where((element) => element.typeId == '2').length;
+        return [personalTask, privateTask, workTask];
+      }
+    }
+    return [0, 0, 0];
+  }
+
   // convert all task out of date to canceled........
 
   Future<void> outOfDateToCanceled() async {

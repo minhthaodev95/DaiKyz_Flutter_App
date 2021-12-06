@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:56:09
+ ///  Modified time: 2021-12-06 15:24:21
  ///  Description:
  */
 
@@ -57,38 +57,49 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
                 ),
               ),
             ),
-            Container(
-                height: MediaQuery.of(context).size.width - 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: const Color(0xffE1E2E3),
-                ),
-                margin: const EdgeInsets.all(30.0),
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, bottom: 0, top: 15.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 65,
-                      child: TableCalendar(
-                        shouldFillViewport: true,
-                        firstDay: DateTime.utc(2010, 10, 16),
-                        lastDay: DateTime.utc(2030, 3, 14),
-                        focusedDay: DateTime.now(),
-                        daysOfWeekVisible: false,
-                        calendarFormat: CalendarFormat.week,
+            IntrinsicHeight(
+              child: Container(
+                  height: MediaQuery.of(context).size.width - 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: const Color(0xffE1E2E3),
+                  ),
+                  margin: const EdgeInsets.all(30.0),
+                  // padding: const EdgeInsets.only(
+                  //     left: 15.0, right: 15.0, bottom: 0, top: 15.0),
+                  child: Column(
+                    children: [
+                      Flexible(
+                        flex: 3,
+                        child: SizedBox(
+                          // height: 65,
+                          width: MediaQuery.of(context).size.width,
+                          child: TableCalendar(
+                            shouldFillViewport: true,
+                            firstDay: DateTime.utc(2010, 10, 16),
+                            lastDay: DateTime.utc(2030, 3, 14),
+                            focusedDay: DateTime.now(),
+                            daysOfWeekVisible: false,
+                            calendarFormat: CalendarFormat.week,
+                          ),
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 25.0, bottom: 0),
-                      width: 300,
-                      height: 200,
-                      child: CustomPaint(
-                        foregroundPainter: GraphPainter(),
+                      Flexible(
+                        flex: 10,
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, right: 5.0, bottom: 0, top: 0.0),
+                          margin: const EdgeInsets.only(top: 25.0, bottom: 0),
+                          width: 300,
+                          height: 180,
+                          child: CustomPaint(
+                            foregroundPainter: GraphPainter(),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                )),
+                    ],
+                  )),
+            ),
           ],
         ),
       ),

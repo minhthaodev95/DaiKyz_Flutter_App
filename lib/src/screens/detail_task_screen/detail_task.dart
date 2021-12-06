@@ -2,11 +2,11 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 10:54:18
+ ///  Modified time: 2021-12-06 15:32:50
  ///  Description:
  */
 
-import 'package:Dailoz/src/data/dymmyData/data.dart';
+import 'package:Dailoz/src/data/data.dart';
 import 'package:Dailoz/src/models/type_model.dart';
 import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:flutter/material.dart';

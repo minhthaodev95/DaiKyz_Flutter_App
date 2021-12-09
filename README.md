@@ -1,5 +1,4 @@
-# ui_practice
-
+# Daily Schedule
 A new Flutter project.
 
 ## Getting Started

@@ -2,28 +2,35 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-04 10:36:53
+ ///  Modified time: 2021-12-09 14:34:24
  ///  Description:
  */
 
 import 'package:Dailoz/generated/l10n.dart';
 import 'package:Dailoz/src/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:Dailoz/src/blocs/localizaton_bloc/localization_bloc.dart';
+import 'package:Dailoz/src/models/task_model.dart';
+import 'package:Dailoz/src/repository/task_repository.dart';
 import 'package:Dailoz/src/repository/user_repository.dart';
 import 'package:Dailoz/src/screens/add_task_screen/add_task_screen.dart';
 import 'package:Dailoz/src/screens/authscreens/login_screen.dart';
 import 'package:Dailoz/src/screens/authscreens/onboarding_screen.dart';
+import 'package:Dailoz/src/screens/detail_task_screen/detail_task.dart';
 import 'package:Dailoz/src/screens/graphicscreen/analytic_screen.dart';
 import 'package:Dailoz/src/screens/homescreen/home_screen.dart';
 import 'package:Dailoz/src/screens/profilescreen/profile_screen.dart';
 import 'package:Dailoz/src/screens/taskscreen/task_screen.dart';
+import 'package:Dailoz/src/services/notification_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
@@ -57,7 +64,35 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    tz.initializeTimeZones();
+
     _getLanguages();
+    NotificationService().init().then((payload) async {
+      final NotificationAppLaunchDetails? details = await NotificationService()
+          .flutterLocalNotificationPlugin
+          .getNotificationAppLaunchDetails();
+      if (details!.didNotificationLaunchApp) {
+        // print(details.payload);
+        if (details.payload != null) {
+          Task task = await TaskRepository().getTaskById(details.payload!);
+          Navigator.push(
+            navigatorKey.currentState!.context,
+            MaterialPageRoute(
+              builder: (context) => DetailTask(
+                id: task.id,
+                // title: task.title,
+                // description: task.description,
+                // tags: task.tags,
+                // typeId: task.typeId,
+                // process: task.process,
+                // start: task.dateStart,
+                // end: task.dateEnd,
+              ),
+            ),
+          );
+        }
+      }
+    });
 
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.add(AppStarted());
@@ -106,6 +141,7 @@ class _MyAppState extends State<MyApp> {
                     .add(ChangeToVietnamese());
               }
               return MaterialApp(
+                navigatorKey: navigatorKey,
                 localizationsDelegates: const [
                   // AppLocalizations.delegate,
                   S.delegate,

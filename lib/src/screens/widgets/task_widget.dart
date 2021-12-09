@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-06 15:43:10
+ ///  Modified time: 2021-12-09 15:18:02
  ///  Description:
  */
 
@@ -25,6 +25,7 @@ class StackWidget extends StatefulWidget {
     required this.end,
     required this.cTitleWidth,
     required this.kWidth,
+    this.displayDate,
     this.onDelete,
     this.onDisable,
     this.onEnable,
@@ -45,6 +46,7 @@ class StackWidget extends StatefulWidget {
   final String process;
   final double cTitleWidth;
   final double kWidth;
+  final bool? displayDate;
 
   @override
   State<StackWidget> createState() => _StackWidgetState();
@@ -102,12 +104,6 @@ class _StackWidgetState extends State<StackWidget> {
           MaterialPageRoute(
               builder: (context) => EditTaskScreen(
                     id: widget.id,
-                    title: widget.title,
-                    description: widget.description,
-                    tags: widget.tags,
-                    typeId: widget.typeId,
-                    start: widget.start,
-                    end: widget.end,
                   )),
         );
         break;
@@ -165,17 +161,6 @@ class _StackWidgetState extends State<StackWidget> {
                                   MaterialPageRoute(
                                     builder: (context) => DetailTask(
                                       id: widget.id,
-                                      title: widget.title,
-                                      description: widget.description,
-                                      tags: widget.tags,
-                                      typeId: widget.typeId,
-                                      process: widget.process,
-                                      start: widget.start,
-                                      end: widget.end,
-                                      onEnable: widget.onEnable,
-                                      onDisable: widget.onDisable,
-                                      onRestore: widget.onRestore,
-                                      onDelete: widget.onDelete,
                                     ),
                                   ),
                                 );
@@ -223,6 +208,24 @@ class _StackWidgetState extends State<StackWidget> {
                                     fontSize: 16,
                                     fontFamily: 'Roboto'),
                               ),
+                              if (widget.displayDate == true)
+                                const Text(
+                                  ' | ',
+                                  style: TextStyle(
+                                      color: Color(0xff9AA8C7),
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 16,
+                                      fontFamily: 'Roboto'),
+                                ),
+                              if (widget.displayDate == true)
+                                Text(
+                                  DateFormat('dd MMMM yyyy').format(widget.end),
+                                  style: const TextStyle(
+                                      color: Color(0xff9AA8C7),
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 16,
+                                      fontFamily: 'Roboto'),
+                                ),
                             ],
                           )
                         ],

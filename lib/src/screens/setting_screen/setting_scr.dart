@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-03 13:33:48
+ ///  Modified time: 2021-12-09 12:25:26
  ///  Description:
  */
 
@@ -51,7 +51,6 @@ class _SettingScreenState extends State<SettingScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       language = languageInput;
-      print('Lan: $language');
     });
     prefs.setString('language', languageInput);
   }

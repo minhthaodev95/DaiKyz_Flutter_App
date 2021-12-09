@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-06 15:09:08
+ ///  Modified time: 2021-12-09 15:21:37
  ///  Description:
  */
 
@@ -121,7 +121,7 @@ class _ScatChartWidgetState extends State<ScatChartWidget> {
                         shape: BoxShape.circle,
                       ),
                     ),
-                    Expanded(child: Container()),
+                    const SizedBox(width: 5.0),
                     const Text(
                       'Personal',
                       style: TextStyle(
@@ -139,7 +139,7 @@ class _ScatChartWidgetState extends State<ScatChartWidget> {
                         shape: BoxShape.circle,
                       ),
                     ),
-                    Expanded(child: Container()),
+                    const SizedBox(width: 5.0),
                     const Text(
                       'Private',
                       style: TextStyle(
@@ -157,7 +157,7 @@ class _ScatChartWidgetState extends State<ScatChartWidget> {
                         shape: BoxShape.circle,
                       ),
                     ),
-                    Expanded(child: Container()),
+                    const SizedBox(width: 5.0),
                     const Text(
                       'Work',
                       style: TextStyle(

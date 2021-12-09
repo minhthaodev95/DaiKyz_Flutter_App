@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-03 10:50:48
+ ///  Modified time: 2021-12-09 13:35:51
  ///  Description:
  */
 
@@ -46,6 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _authenticationBloc.add(AppStarted());
     _taskBloc = TaskBloc();
     _taskBloc.add(SelectedDayTask(daySelected: DateTime.now()));
+
+    TaskRepository().setNotification();
   }
 
   void selectedItem(item) {

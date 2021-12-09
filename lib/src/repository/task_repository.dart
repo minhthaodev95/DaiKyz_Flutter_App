@@ -1,4 +1,5 @@
 import 'package:Dailoz/src/models/task_model.dart';
+import 'package:Dailoz/src/services/notification_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -89,7 +90,7 @@ class TaskRepository {
             .doc(_currentUserUid)
             .collection('tasks')
             // .where('typeId', isEqualTo: 'a')
-            .orderBy('dateStart', descending: false)
+            .orderBy('dateStart', descending: true)
             .get();
 
     // Check day of task
@@ -287,5 +288,52 @@ class TaskRepository {
         return snapshot;
       });
     }
+  }
+
+  //set Notification
+  Future<void> setNotification() async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    QuerySnapshot<Map<String, dynamic>> response = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .where('dateStart', isGreaterThan: DateTime.now())
+        .orderBy('dateStart', descending: false)
+        .get();
+
+    // Check day of task
+    if (response.size > 0) {
+      List<Task> allTasks = response.docs
+          .where((element) =>
+              (element['dateTask'] ==
+                  DateFormat('dd-MM-yyyy').format(DateTime.now())) &&
+              (element['process'] == 'ongoing'))
+          .map((element) {
+        return Task.fromJson(element.data(), element.id);
+      }).toList();
+      NotificationService().cancelAllNotifications();
+      for (Task task in allTasks) {
+        final id = task.dateStart.millisecondsSinceEpoch ~/ 1000;
+        await NotificationService().showNotification(
+            id, task.title, task.description, task.dateStart, task);
+      }
+      //task.dateStart
+    }
+  }
+
+  // get Task by id
+  Future<Task> getTaskById(String id) async {
+    String _currentUserUid = _firebaseAuth.currentUser!.uid;
+
+    DocumentSnapshot<Map<String, dynamic>> response = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentUserUid)
+        .collection('tasks')
+        .doc(id)
+        .get();
+    return Task.fromJson(response.data()!, response.id);
   }
 }

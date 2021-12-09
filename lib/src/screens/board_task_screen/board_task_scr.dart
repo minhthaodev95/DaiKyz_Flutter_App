@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-06 15:37:09
+ ///  Modified time: 2021-12-09 15:18:48
  ///  Description:
  */
 
@@ -464,6 +464,7 @@ class _BoardTaskState extends State<BoardTask> {
                           end: snapshots.data![idx].dateEnd,
                           cTitleWidth: 225,
                           kWidth: 220,
+                          displayDate: true,
                           onDelete: () =>
                               _onDeleteTask(context, snapshots.data![idx].id),
                           onDisable: () =>

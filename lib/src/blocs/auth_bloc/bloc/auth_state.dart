@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-18 16:30:05
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-20 15:48:44
+ ///  Modified time: 2021-12-09 17:45:33
  ///  Description:
  */
 
@@ -33,7 +33,7 @@ class Authenticated extends AuthenticationState {
   }
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [currentUser];
 }
 
 class Unauthenticated extends AuthenticationState {

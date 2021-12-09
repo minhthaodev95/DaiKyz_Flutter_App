@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-01 10:37:13
+ ///  Modified time: 2021-12-09 17:49:07
  ///  Description:
  */
 
@@ -16,7 +16,7 @@ List<TaskType> typeTask = [
     color: '0xff858FE9', //withOpacity
     opacity: 0.25,
     colorBoxIcon: '0xff858FE9',
-    totalTask: 5,
+    totalTask: 0,
   ),
   TaskType(
     id: '2',
@@ -25,7 +25,7 @@ List<TaskType> typeTask = [
     color: '0xff7FC9E7',
     opacity: 0.25,
     colorBoxIcon: '0xff7FC9E7',
-    totalTask: 3,
+    totalTask: 0,
   ),
   TaskType(
     id: '3',
@@ -34,7 +34,7 @@ List<TaskType> typeTask = [
     color: '0xffE77D7D',
     opacity: 0.25,
     colorBoxIcon: '0xffE77D7D',
-    totalTask: 8,
+    totalTask: 0,
   ),
   TaskType(
     id: '4',
@@ -43,7 +43,7 @@ List<TaskType> typeTask = [
     color: '0xffCBF9D8',
     opacity: 0.25,
     colorBoxIcon: '0xff81E89E',
-    totalTask: 12,
+    totalTask: 0,
   ),
   TaskType(
     id: '5',
@@ -52,6 +52,6 @@ List<TaskType> typeTask = [
     color: '0xff858FE9',
     opacity: 0.25,
     colorBoxIcon: '0xff858FE9',
-    totalTask: 45,
+    totalTask: 0,
   ),
 ];

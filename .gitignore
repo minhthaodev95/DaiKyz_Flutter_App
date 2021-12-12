@@ -77,3 +77,7 @@ svc-keyfile.json
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+android/key.properties
+android/app/upload-keystore.jks
+android/app/google-ervice.json
+ios/Runner/GoogleService-Info.plist

@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-09 15:18:02
+ ///  Modified time: 2021-12-09 18:04:38
  ///  Description:
  */
 
@@ -219,7 +219,7 @@ class _StackWidgetState extends State<StackWidget> {
                                 ),
                               if (widget.displayDate == true)
                                 Text(
-                                  DateFormat('dd MMMM yyyy').format(widget.end),
+                                  DateFormat('dd-MM-yyyy').format(widget.end),
                                   style: const TextStyle(
                                       color: Color(0xff9AA8C7),
                                       fontWeight: FontWeight.normal,
@@ -231,6 +231,7 @@ class _StackWidgetState extends State<StackWidget> {
                         ],
                       ),
                     ),
+                    // if (widget.displayDate == null)
                     Expanded(child: Container()),
                     //Button more_vertical inside task Widget
                     SizedBox(

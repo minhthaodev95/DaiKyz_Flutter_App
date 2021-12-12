@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:54:28
+ ///  Modified time: 2021-12-12 18:46:26
  ///  Description:
  */
 
@@ -94,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 60.0,
+                  height: 50.0,
                 ),
                 const Align(
                   alignment: Alignment.bottomLeft,

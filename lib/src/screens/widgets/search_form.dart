@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-02 07:35:46
+ ///  Modified time: 2021-12-12 18:44:03
  ///  Description:
  */
 
@@ -43,7 +43,21 @@ class SearchForm extends StatelessWidget {
               fontSize: 18.0, fontFamily: "Roboto", color: Color(0xffB0B5DD)),
           prefixIcon: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: SvgPicture.asset('assets/icons/search_icon.svg'),
+            child: GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text('Tính năng này hiện chưa khả dụng !!'),
+                        ],
+                      ),
+                      backgroundColor: Colors.blue[600],
+                    ),
+                  );
+                },
+                child: SvgPicture.asset('assets/icons/search_icon.svg')),
           ),
           suffixIcon: Padding(
             padding: const EdgeInsets.all(15.0),

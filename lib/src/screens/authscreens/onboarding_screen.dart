@@ -24,7 +24,7 @@ class OnboardingScreen extends StatelessWidget {
               ),
               const Expanded(
                 child: Text(
-                  'DaiKey',
+                  'Daily Schedule',
                   style: TextStyle(
                       fontSize: 32,
                       fontFamily: 'Roboto',

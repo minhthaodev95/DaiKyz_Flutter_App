@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-12-02 07:34:53
+ ///  Modified time: 2021-12-12 18:42:03
  ///  Description:
  */
 
@@ -122,74 +122,11 @@ class _ProcessTaskState extends State<ProcessTask> {
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.white,
                 ),
-                height: 400,
+                height: 280,
                 width: 300,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Sort by tag',
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          color: Color(0xff000000),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Roboto'),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: 80,
-                      child: ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(maxWidth: 200, minWidth: 200),
-                        child: ListView.builder(
-                          itemCount: tags.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          // physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => Container(
-                            margin: const EdgeInsets.only(right: 5.0),
-                            child: ChoiceChip(
-                              onSelected: (bool selected) {
-                                setState(() {
-                                  if (!selectedIndex.contains(index)) {
-                                    selectedIndex.add(index);
-                                  } else if (selectedIndex.contains(index)) {
-                                    selectedIndex.remove(index);
-                                  }
-                                });
-                              },
-                              backgroundColor: index == 0
-                                  ? const Color(0xffECEAFF)
-                                  : index == 1
-                                      ? const Color(0xffFFEFEB)
-                                      : index == 2
-                                          ? const Color(0xffFFE9ED)
-                                          : const Color(0xffD1FEFF),
-                              label: Text(
-                                tags[index],
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  color: index == 0
-                                      ? const Color(0xff8F81FE)
-                                      : index == 1
-                                          ? const Color(0xffF0A58E)
-                                          : index == 2
-                                              ? const Color(0xffF57C96)
-                                              : const Color(0xff1EC1C3),
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                              selected: selectedIndex.contains(index),
-                              disabledColor: const Color(0xff000000),
-                              selectedColor: const Color(0xff8F99EB),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                     const Text(
                       'Sort by type',
                       style: TextStyle(
@@ -367,7 +304,21 @@ class _ProcessTaskState extends State<ProcessTask> {
                                         width: 1.0, color: Color(0xff5B67CA))),
                                 // elevation: 5.0,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text(
+                                            'Tính năng này hiện chưa khả dụng !!'),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.blue[600],
+                                  ),
+                                );
+                              },
                               child: const Text('Filter'),
                             ),
                           ),

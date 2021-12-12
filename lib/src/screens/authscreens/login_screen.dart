@@ -2,7 +2,7 @@
  ///  Author: Minh Thao Nguyen
  ///  Create Time: 2021-11-14 11:29:57
  ///  Modified by: Minh Thao Nguyen
- ///  Modified time: 2021-11-24 17:53:51
+ ///  Modified time: 2021-12-12 18:46:08
  ///  Description:
  */
 
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           const SizedBox(
-                            height: 80.0,
+                            height: 50.0,
                           ),
                           const Align(
                             alignment: Alignment.bottomLeft,

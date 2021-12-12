@@ -53,13 +53,7 @@ class NotificationService {
           MaterialPageRoute(
             builder: (context) => DetailTask(
               id: task.id,
-              // title: task.title,
-              // description: task.description,
-              // tags: task.tags,
-              // typeId: task.typeId,
-              // process: task.process,
-              // start: task.dateStart,
-              // end: task.dateEnd,
+
             ),
           ),
         );
@@ -93,7 +87,8 @@ class NotificationService {
             channelDescription: 'Main channel notifications',
             importance: Importance.max,
             priority: Priority.max,
-            icon: '@drawable/app_icon'),
+            icon: '@drawable/app_icon'
+            ),
         iOS: IOSNotificationDetails(
           presentAlert: true,
           presentBadge: true,
